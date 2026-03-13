@@ -1,27 +1,67 @@
-import React, { useRef } from 'react';
+import React, { useRef, useState } from 'react';
 import gsap from 'gsap';
 import { ScrollTrigger } from 'gsap/ScrollTrigger';
 import { useGSAP } from '@gsap/react';
 
 gsap.registerPlugin(ScrollTrigger);
 
+// Move data outside so it doesn't re-initialize on every render
+const projectList = [
+  // --- ORIGINAL LIST ---
+  { title: 'JNPT, Navi Mumbai', category: 'Breakwaters', status: '1988', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
+  { title: 'Ennore Port, Chennai', category: 'Breakwaters', status: '1988', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
+  { title: 'Karaikal Port', category: 'Breakwaters', status: '2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]' },
+  { title: 'Project Seabird - Karwar', category: 'Breakwaters', status: '2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]' },
+  { title: 'Amadalli', category: 'Building Construction', status: '2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]' },
+  { title: 'JNPT Floating Breakwater', category: 'Breakwaters', status: 'Delivered', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[500px]' },
+  { title: 'Ennore Port Navigation Channel', category: 'Capital Dredging', status: 'Completed', img: '/hero/ennore_port.webp', height: 'h-[700px]' },
+  { title: 'Rasulpur Deep Sea Port', category: 'Port Development', status: 'Planning', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[450px]' },
+  { title: 'Redi Port Phase II', category: 'Capital Dredging', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[550px]' },
+
+  // --- COMPLETED CONSTRUCTION PROJECTS ---
+  { title: 'Hazira Plant Outfitting Jetty-2', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1621516762394-44b419401f80?q=80&w=1000&auto=format&fit=crop', height: 'h-[500px]' },
+  { title: 'Fisheries Harbour, Karwar', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[600px]' },
+  { title: 'Revdanda Approach & Caisson Bridge', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[450px]' },
+  { title: 'Elephanta Island Passenger Jetty', category: 'Jetties', status: 'Completed', img: '/hero/elephanta_jetty.webp', height: 'h-[400px]' },
+  { title: 'Glencore Barge Terminal, Mumbai', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[550px]' },
+  { title: 'Dahanu Thermal Power Cooling System', category: 'Port Development', status: 'Completed', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[650px]' },
+  { title: 'Orkay Silk Mills, Patalganga', category: 'Building Construction', status: 'Completed', img: 'https://images.unsplash.com/photo-1577983696515-b6d85a153835?q=80&w=1000&auto=format&fit=crop', height: 'h-[400px]' },
+  { title: 'Naiknagar Nalla Training', category: 'Building Construction', status: 'Completed', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[500px]' },
+
+  // --- COMPLETED DREDGING PROJECTS ---
+  { title: 'Mithi River Deepening, Mahim', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1621516762394-44b419401f80?q=80&w=1000&auto=format&fit=crop', height: 'h-[450px]' },
+  { title: 'Mazagon Dock Rock Blasting', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
+  { title: 'River Tapti, Hazira', category: 'Dredging', status: 'Completed', img: '/hero/ennore_port.webp', height: 'h-[500px]' },
+  { title: 'Thane Creek Pipeline Trench', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[400px]' },
+  { title: 'Dabhol, Varsova & Gorai', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[550px]' },
+  { title: 'Koyna Hydroelectric Rock Bund', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[650px]' },
+  { title: 'Dharamtar Creek Wharf Channels', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1621516762394-44b419401f80?q=80&w=1000&auto=format&fit=crop', height: 'h-[400px]' },
+
+  // --- ONGOING / LATEST PROJECTS ---
+  { title: 'Dahej Offshore HDPE Pipeline', category: 'Port Development', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
+  { title: 'Perur 400 MLD SWRO Plant', category: 'Breakwaters', status: 'Ongoing', img: '/hero/karaikal_port.webp', height: 'h-[700px]' },
+  { title: 'NFXP Trenching, Offshore Qatar', category: 'Dredging', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[500px]' },
+];
+
+const filters = ['All Works', 'Breakwaters', 'Dredging', 'Jetties', 'Port Development'];
+
 const Projects = () => {
   const pageRef = useRef(null);
+  
+  // 1. Setup React State for the active filter
+  const [activeFilter, setActiveFilter] = useState('All Works');
 
-  // Expanded dummy data to populate the masonry grid
-  const projectList = [
-    { title: 'Karaikal Port Expansion', category: 'Dredging', status: 'Completed', img: '/hero/karaikal_port.webp', height: 'h-[600px]' },
-    { title: 'JNPT Floating Breakwater', category: 'Breakwaters', status: 'Delivered', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[400px]' },
-    { title: 'Elephanta Island Jetty', category: 'Jetties', status: 'Ongoing', img: '/hero/elephanta_jetty.webp', height: 'h-[500px]' },
-    { title: 'Ennore Port Navigation Channel', category: 'Dredging', status: 'Completed', img: '/hero/ennore_port.webp', height: 'h-[700px]' },
-    { title: 'Vizhinjam Coastal Armoring', category: 'Breakwaters', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[450px]' },
-    { title: 'Mumbai Offshore Logistics Base', category: 'Jetties', status: 'Delivered', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[550px]' },
-  ];
+  // 2. Filter the projects dynamically based on the active state
+  const displayedProjects = activeFilter === 'All Works' 
+    ? projectList 
+    : projectList.filter(proj => proj.category.toLowerCase().includes(activeFilter.toLowerCase()));
 
+  // ==============================================================
+  // ANIMATION BLOCK 1: Page Load (Runs only once)
+  // ==============================================================
   useGSAP(() => {
     const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
 
-    // 1. Initial Page Load Animations
     tl.fromTo('.page-title', 
       { y: '120%', rotate: 2 }, 
       { y: '0%', rotate: 0, duration: 1.5, stagger: 0.1, delay: 0.2 }
@@ -31,9 +71,17 @@ const Projects = () => {
       { opacity: 1, y: 0, duration: 1, stagger: 0.1 }, 
       '-=1'
     );
+  }, { scope: pageRef }); // No dependencies, runs once
 
-    // 2. High-End Masonry Grid Reveals & Parallax
+  // ==============================================================
+  // ANIMATION BLOCK 2: Grid Reloads (Runs when state changes)
+  // ==============================================================
+  useGSAP(() => {
     const cards = gsap.utils.toArray('.project-card');
+
+    // Optional: Refresh ScrollTrigger so it recalculates heights for the new grid layout
+    ScrollTrigger.refresh();
+
     cards.forEach((card) => {
       const imgWrap = card.querySelector('.img-wrap');
       const img = card.querySelector('img');
@@ -67,7 +115,8 @@ const Projects = () => {
         }
       );
     });
-  }, { scope: pageRef });
+  }, { scope: pageRef, dependencies: [activeFilter] }); 
+  // ^^^ The dependencies array tells GSAP to clean up and re-run these animations when activeFilter changes
 
   return (
     <main ref={pageRef} className="w-full bg-white text-black min-h-screen flex flex-col pt-32 overflow-hidden">
@@ -79,7 +128,6 @@ const Projects = () => {
             [ Our Work ]
           </span>
           
-          {/* Hidden overflow masks for crisp text sliding */}
           <div className="overflow-hidden pb-2">
             <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none origin-bottom-left block">
               108+
@@ -94,66 +142,75 @@ const Projects = () => {
           </div>
         </div>
         
-        {/* Filter Options */}
+        {/* ================= INTERACTIVE FILTER OPTIONS ================= */}
         <div className="page-fade flex flex-wrap gap-6 text-xs uppercase tracking-widest text-black/50 mb-4">
-          <button className="text-cyan-600 border-b border-cyan-600 pb-1 font-bold">All Works</button>
-          <button className="hover:text-black hover:border-b hover:border-black/30 pb-1 transition-all">Breakwaters</button>
-          <button className="hover:text-black hover:border-b hover:border-black/30 pb-1 transition-all">Dredging</button>
-          <button className="hover:text-black hover:border-b hover:border-black/30 pb-1 transition-all">Jetties</button>
+          {filters.map((filter) => (
+            <button 
+              key={filter}
+              onClick={() => setActiveFilter(filter)}
+              // Dynamic classes to highlight the active tab
+              className={`pb-1 transition-all duration-300 ${
+                activeFilter === filter 
+                  ? 'text-cyan-600 border-b border-cyan-600 font-bold' 
+                  : 'hover:text-black hover:border-b hover:border-black/30'
+              }`}
+            >
+              {filter}
+            </button>
+          ))}
         </div>
       </section>
 
       {/* ================= MASONRY GRID SECTION ================= */}
-      <section className="px-6 md:px-16 lg:px-24 pb-32 border-t border-black/10 pt-24">
+      <section className="px-6 md:px-16 lg:px-24 pb-32 border-t border-black/10 pt-24 min-h-screen">
         
-        {/* CSS Columns create the true Masonry layout automatically */}
-        <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-          
-          {projectList.map((proj, i) => (
-            <div key={i} className="project-card group cursor-pointer break-inside-avoid relative flex flex-col">
-              
-              {/* Outer Wrapper for Structure, Inner for Clip-Path Mask */}
-              <div className={`relative overflow-hidden w-full ${proj.height} mb-4 bg-gray-50`}>
-                <div className="img-wrap absolute inset-0 w-full h-full origin-bottom">
-                   <img 
-                     src={proj.img} 
-                     alt={proj.title} 
-                     // Scaled to 115% to allow room for the vertical parallax travel
-                     className="w-full h-full object-cover scale-[1.15] grayscale group-hover:grayscale-0 transition-all duration-700" 
-                   />
+        {displayedProjects.length > 0 ? (
+          <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
+            {displayedProjects.map((proj) => (
+              <div key={`${proj.title}-${activeFilter}`} className="project-card group cursor-pointer break-inside-avoid relative flex flex-col">
+                
+                <div className={`relative overflow-hidden w-full ${proj.height} mb-4 bg-gray-50`}>
+                  <div className="img-wrap absolute inset-0 w-full h-full origin-bottom">
+                     <img 
+                       src={proj.img} 
+                       alt={proj.title} 
+                       className="w-full h-full object-cover scale-[1.15] grayscale group-hover:grayscale-0 transition-all duration-700" 
+                     />
+                  </div>
+                  
+                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
+                    <span className="text-white text-xs uppercase tracking-[0.2em] border border-white/50 px-6 py-3 rounded-full scale-90 group-hover:scale-100 transition-transform duration-500">
+                      View Project
+                    </span>
+                  </div>
                 </div>
                 
-                {/* Hover Overlay Detail (Optional high-end touch) */}
-                <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                  <span className="text-white text-xs uppercase tracking-[0.2em] border border-white/50 px-6 py-3 rounded-full scale-90 group-hover:scale-100 transition-transform duration-500">
-                    View Project
-                  </span>
+                <div className="flex justify-between items-start mt-2">
+                  <div>
+                    <h3 className="text-lg md:text-xl font-bold uppercase tracking-tight text-black mb-1 group-hover:text-cyan-600 transition-colors">
+                      {proj.title}
+                    </h3>
+                    <span className="text-black/50 uppercase tracking-[0.2em] text-[9px] font-bold">
+                      {proj.category}
+                    </span>
+                  </div>
+                  <div className="text-right">
+                    <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold">
+                      {proj.status}
+                    </span>
+                  </div>
                 </div>
+                
               </div>
-              
-              {/* Project Meta Data */}
-              <div className="flex justify-between items-start mt-2">
-                <div>
-                  <h3 className="text-lg md:text-xl font-bold uppercase tracking-tight text-black mb-1 group-hover:text-cyan-600 transition-colors">
-                    {proj.title}
-                  </h3>
-                  <span className="text-black/50 uppercase tracking-[0.2em] text-[9px] font-bold">
-                    {proj.category}
-                  </span>
-                </div>
-                <div className="text-right">
-                  <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold">
-                    {proj.status}
-                  </span>
-                </div>
-              </div>
-              
-            </div>
-          ))}
-          
-        </div>
+            ))}
+          </div>
+        ) : (
+          /* Empty State if a filter has no projects */
+          <div className="w-full flex justify-center items-center h-64 border border-dashed border-black/20">
+             <span className="text-black/40 uppercase tracking-widest text-xs">No projects found in this category.</span>
+          </div>
+        )}
 
-        {/* Load More Button */}
         <div className="w-full flex justify-center mt-24">
           <button className="group flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-black">
             <span className="border-b border-black pb-1 group-hover:text-cyan-600 group-hover:border-cyan-600 transition-colors">

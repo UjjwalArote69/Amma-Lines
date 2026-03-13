@@ -128,8 +128,8 @@ const About = () => {
           <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
             <div className="team-card group cursor-pointer">
               <div className="h-[400px] bg-black/5 mb-6 overflow-hidden relative border border-black/10">
-                <img src="https://images.unsplash.com/photo-1560250097-0b93528c311a?q=80&w=800&auto=format&fit=crop" alt="Mr. Hemanth Meka Rao" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div>
+                <img src="/about/hmr.webp" alt="Mr. Hemanth Meka Rao" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div> */}
               </div>
               <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-2 block">Director</span>
               <h3 className="text-xl font-bold uppercase tracking-tight text-black mb-3">Mr. Hemanth Meka Rao</h3>
@@ -140,8 +140,8 @@ const About = () => {
 
             <div className="team-card group cursor-pointer">
               <div className="h-[400px] bg-black/5 mb-6 overflow-hidden relative border border-black/10">
-                <img src="https://images.unsplash.com/photo-1573496359142-b8d87734a5a2?q=80&w=800&auto=format&fit=crop" alt="Mr. Arindam Basu" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div>
+                <img src="/about/basusir.webp" alt="Mr. Arindam Basu" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div> */}
               </div>
               <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-2 block">Vice President</span>
               <h3 className="text-xl font-bold uppercase tracking-tight text-black mb-3">Mr. Arindam Basu</h3>
@@ -152,8 +152,8 @@ const About = () => {
 
             <div className="team-card group cursor-pointer">
               <div className="h-[400px] bg-black/5 mb-6 overflow-hidden relative border border-black/10">
-                <img src="https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?q=80&w=800&auto=format&fit=crop" alt="Capt. M. K. Rayudu" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
-                <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div>
+                <img src="/about/rayudusir.webp" alt="Capt. M. K. Rayudu" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
+                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div> */}
               </div>
               <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-2 block">Dredging Head</span>
               <h3 className="text-xl font-bold uppercase tracking-tight text-black mb-3">Capt. M. K. Rayudu</h3>
