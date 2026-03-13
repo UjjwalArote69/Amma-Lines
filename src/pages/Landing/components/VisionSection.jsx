@@ -29,7 +29,7 @@ const VisionSection = () => {
 
       <div className="vision-image w-full md:w-[400px] lg:w-[450px] relative">
         <div className="relative z-10">
-           <img src="/hero/vision_section.jpg" alt="Marine Infrastructure" className="w-full h-[80%] object-cover grayscale hover:grayscale-0 transition-all duration-700" />
+           <img src="/hero/vision_section.webp" alt="Marine Infrastructure" className="w-full h-[80%] object-cover grayscale hover:grayscale-0 transition-all duration-700" />
         </div>
         <div className="absolute -bottom-6 -left-6 w-32 h-32 border-l-2 border-b-2 border-cyan-600 z-0"></div>
       </div>

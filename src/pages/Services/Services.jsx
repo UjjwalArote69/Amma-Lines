@@ -23,7 +23,7 @@ const Services = () => {
     {
       title: 'Jetty Engineering',
       description: 'Constructing robust Block, Pile, and RO-RO jetties designed to withstand harsh coastal conditions while enabling the smooth, high-capacity transfer of wheeled cargo and heavy vehicles.',
-      img: '/hero/elephanta_jetty.jpg' // Assuming this local asset exists based on previous pages
+      img: '/hero/elephanta_jetty.webp' // Assuming this local asset exists based on previous pages
     },
     {
       title: 'Caisson & Cofferdams',

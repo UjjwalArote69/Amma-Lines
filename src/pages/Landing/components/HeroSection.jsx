@@ -67,7 +67,7 @@ const HeroSection = () => {
         style={{ clipPath: 'inset(100% 0% 0% 0%)' }} 
       >
         <img 
-          src="/hero/cargo-ship-sailing-ocean.jpg" 
+          src="/hero/cargo-ship-sailing-ocean.webp" 
           alt="Cargo Ship Aerial" 
           className="hero-bg-img w-full h-full object-cover opacity-70"
         />

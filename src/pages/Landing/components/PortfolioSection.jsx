@@ -9,9 +9,9 @@ const PortfolioSection = () => {
   const containerRef = useRef(null);
 
   const projects = [
-    { title: 'Karaikal Port', status: 'Completed 2009', img: '/hero/karaikal_port.png', height: 'h-[400px]', offset: '' },
-    { title: 'Ennore Port - Chennai', status: 'Completed 1999', img: '/hero/ennore_port.jpg', height: 'h-[500px]', offset: 'md:-translate-y-12', isMiddle: true },
-    { title: 'Coastal Armoring System', status: 'Delivered', img: '/hero/elephanta_jetty.jpg', height: 'h-[400px]', offset: 'md:translate-y-12' },
+    { title: 'Karaikal Port', status: 'Completed 2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]', offset: '' },
+    { title: 'Ennore Port - Chennai', status: 'Completed 1999', img: '/hero/ennore_port.webp', height: 'h-[500px]', offset: 'md:-translate-y-12', isMiddle: true },
+    { title: 'Coastal Armoring System', status: 'Delivered', img: '/hero/elephanta_jetty.webp', height: 'h-[400px]', offset: 'md:translate-y-12' },
   ];
 
   useGSAP(() => {

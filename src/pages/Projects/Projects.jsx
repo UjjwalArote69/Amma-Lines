@@ -10,10 +10,10 @@ const Projects = () => {
 
   // Expanded dummy data to populate the masonry grid
   const projectList = [
-    { title: 'Karaikal Port Expansion', category: 'Dredging', status: 'Completed', img: '/hero/karaikal_port.png', height: 'h-[600px]' },
+    { title: 'Karaikal Port Expansion', category: 'Dredging', status: 'Completed', img: '/hero/karaikal_port.webp', height: 'h-[600px]' },
     { title: 'JNPT Floating Breakwater', category: 'Breakwaters', status: 'Delivered', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[400px]' },
-    { title: 'Elephanta Island Jetty', category: 'Jetties', status: 'Ongoing', img: '/hero/elephanta_jetty.jpg', height: 'h-[500px]' },
-    { title: 'Ennore Port Navigation Channel', category: 'Dredging', status: 'Completed', img: '/hero/ennore_port.jpg', height: 'h-[700px]' },
+    { title: 'Elephanta Island Jetty', category: 'Jetties', status: 'Ongoing', img: '/hero/elephanta_jetty.webp', height: 'h-[500px]' },
+    { title: 'Ennore Port Navigation Channel', category: 'Dredging', status: 'Completed', img: '/hero/ennore_port.webp', height: 'h-[700px]' },
     { title: 'Vizhinjam Coastal Armoring', category: 'Breakwaters', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[450px]' },
     { title: 'Mumbai Offshore Logistics Base', category: 'Jetties', status: 'Delivered', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[550px]' },
   ];
