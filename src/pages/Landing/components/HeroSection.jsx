@@ -1,210 +1,311 @@
-import React, { useRef } from "react";
+import { useRef, useState } from "react";
 import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
-import { useNavigate } from "react-router";
+import { Link } from "react-router";
+import Button from "../../../components/ui/Button";
+import { introDelay } from "../../../utils/preloader";
+import { projects } from "../../../data/projects";
+
+gsap.registerPlugin(ScrollTrigger);
+
+/* Featured triptych — three real, representative works. */
+const triptych = [
+  projects.find((p) => p.title === "North & South Breakwaters"),
+  projects.find((p) => p.title === "Ennore Port Breakwaters"),
+  projects.find((p) => p.title === "Elephanta Island Jetty"),
+].map((p, i) => ({
+  n: String(i + 1).padStart(2, "0"),
+  title: p.location.replace(/,.*$/, ""), // headline location
+  meta: `${p.state} · ${p.year}`,
+  type: `${p.category} · ${p.metric}`,
+  img: p.img,
+}));
+
+const trustStats = [
+  { n: "1978", l: "Founded in Mumbai" },
+  { n: "13 M m³", l: "Dredged in the last decade" },
+  { n: "2", l: "Countries served — India & Qatar" },
+  { n: "ISO", l: "9001 · 14001 · 45001" },
+];
+
+gsap.registerPlugin(ScrollTrigger);
+
+const HeroTile = ({ work, index, active, setActive, className = "", heightClass }) => (
+  <Link
+    to="/projects"
+    onMouseEnter={() => setActive(index)}
+    onMouseLeave={() => setActive(null)}
+    className={`h-tile group relative block ${className}`}
+  >
+    <div
+      className={`relative overflow-hidden ${heightClass}`}
+      style={{ backgroundColor: "var(--color-paper)" }}
+    >
+      <div className="h-mask absolute inset-0">
+        <img loading="lazy" decoding="async"
+          src={work.img}
+          alt={work.title}
+          className={`w-full h-full object-cover transition-all duration-[1200ms] ease-out ${
+            active === index
+              ? "scale-[1.04] grayscale-0 contrast-100"
+              : "scale-[1.0] grayscale contrast-[1.05]"
+          } ${
+            active !== null && active !== index ? "opacity-55" : "opacity-100"
+          }`}
+        />
+      </div>
+
+      {/* Index chip */}
+      <div className="absolute top-3 left-3 md:top-4 md:left-4">
+        <span
+          className="h-6 px-2 flex items-center caption tabular"
+          style={{
+            backgroundColor: "rgba(231,235,240,0.92)",
+            color: "var(--color-ink)",
+          }}
+        >
+          /{work.n}
+        </span>
+      </div>
+
+      {/* Hover arrow */}
+      <div
+        className={`absolute top-3 right-3 md:top-4 md:right-4 h-8 w-8 rounded-full flex items-center justify-center transition-all duration-500 ${
+          active === index ? "opacity-100 scale-100" : "opacity-0 scale-75"
+        }`}
+        style={{ backgroundColor: "var(--color-marine)", color: "#fff" }}
+      >
+        ↗
+      </div>
+
+      {/* Caption pill */}
+      <div className="absolute left-3 right-3 bottom-3 md:left-4 md:right-4 md:bottom-4">
+        <div
+          className="inline-flex flex-col px-3 py-2 backdrop-blur-md"
+          style={{
+            backgroundColor: "rgba(231,235,240,0.92)",
+            color: "var(--color-ink)",
+          }}
+        >
+          <span className="caption text-[var(--color-ink)] leading-tight">
+            {work.title}
+          </span>
+          <span className="caption text-[9px] text-[var(--color-ink-50)] tabular mt-[2px]">
+            {work.meta}
+          </span>
+        </div>
+      </div>
+    </div>
+
+    <div className="mt-3 flex items-baseline justify-between gap-2">
+      <span className="caption text-[var(--color-ink-70)]">{work.type}</span>
+      <span className="caption tabular text-[var(--color-ink-40)]">
+        {work.n}
+      </span>
+    </div>
+  </Link>
+);
 
 const HeroSection = () => {
-  const containerRef = useRef(null);
-  const navigate = useNavigate();
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({
-        defaults: { ease: "expo.out" },
-        delay: 0.3,
-      });
+  const ref = useRef(null);
+  const [activeTile, setActiveTile] = useState(null);
 
-      // 1. Premium Image Reveal (Wipes down while scaling)
-      tl.to(".hero-img-wrap", {
-        clipPath: "inset(0% 0% 0% 0%)",
-        duration: 2,
-        ease: "expo.inOut",
-      })
-        .fromTo(
-          ".hero-bg-img",
-          { scale: 1.3 },
-          {
-            scale: 1,
-            duration: 2.5,
-            ease: "expo.inOut",
-          },
-          "<", // Syncs with the clipPath
-        )
-        // Text slides up from hidden overflow
-        .fromTo(
-          ".hero-text-line",
-          { y: "120%", rotate: 2 },
-          {
-            y: "0%",
-            rotate: 0,
-            duration: 1.5,
-            stagger: 0.1,
-          },
-          "-=1.5",
-        )
-        .fromTo(
-          ".hero-fade",
-          { opacity: 0, y: 20 },
-          {
-            opacity: 1,
-            y: 0,
-            duration: 1,
-            stagger: 0.1,
-          },
-          "-=1",
-        );
+  useGSAP(() => {
+    const tl = gsap.timeline({
+      defaults: { ease: "power2.out" },
+      delay: introDelay(0.2, 3.3),
+    });
 
-      // 2. High-Performance 3D Mouse Interaction
-      // Using gsap.quickTo for hardware-accelerated, buttery smooth tracking
-      const xTo = gsap.quickTo(
-        ".interactive-text-group",
-        "x",
+    tl.fromTo(
+      ".h-kicker > *",
+      { opacity: 0, y: 10 },
+      { opacity: 1, y: 0, duration: 0.8, stagger: 0.05 }
+    )
+      .fromTo(
+        ".h-line",
+        { y: "108%" },
+        { y: "0%", duration: 1.1, stagger: 0.08 },
+        "-=0.4"
+      )
+      .fromTo(
+        ".h-tile",
+        { opacity: 0, y: 40 },
         {
-          duration: 1.2,
-          ease: "power3.out",
+          opacity: 1,
+          y: 0,
+          duration: 1.1,
+          stagger: 0.12,
+          ease: "power2.out",
         },
-      );
-      const yTo = gsap.quickTo(
-        ".interactive-text-group",
-        "y",
+        "-=0.6"
+      )
+      .fromTo(
+        ".h-tile .h-mask",
+        { clipPath: "inset(100% 0% 0% 0%)" },
         {
-          duration: 1.2,
-          ease: "power3.out",
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 1.4,
+          stagger: 0.12,
+          ease: "power2.inOut",
         },
+        "<"
+      )
+      .fromTo(
+        ".h-lower > *",
+        { opacity: 0, y: 14 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.06 },
+        "-=0.8"
       );
-      const rotXTo = gsap.quickTo(
-        ".interactive-text-group",
-        "rotationX",
-        {
-          duration: 1.2,
-          ease: "power3.out",
-        },
-      );
-      const rotYTo = gsap.quickTo(
-        ".interactive-text-group",
-        "rotationY",
-        {
-          duration: 1.2,
-          ease: "power3.out",
-        },
-      );
-
-      const handleMouseMove = (e) => {
-        // Get mouse position relative to the center of the screen
-        const {
-          innerWidth,
-          innerHeight,
-        } = window;
-        const xPos =
-          (e.clientX / innerWidth -
-            0.5) *
-          2; // Ranges from -1 to 1
-        const yPos =
-          (e.clientY / innerHeight -
-            0.5) *
-          2; // Ranges from -1 to 1
-
-        // Subtle Parallax Pan (moves slightly opposite to the mouse)
-        xTo(xPos * -30);
-        yTo(yPos * -15);
-
-        // Subtle 3D Tilt (Creates depth)
-        rotXTo(yPos * 10);
-        rotYTo(xPos * -10);
-      };
-
-      // Attach event listener to the window
-      window.addEventListener(
-        "mousemove",
-        handleMouseMove,
-      );
-
-      // Cleanup listener on unmount
-      return () => {
-        window.removeEventListener(
-          "mousemove",
-          handleMouseMove,
-        );
-      };
-    },
-    { scope: containerRef },
-  );
+  }, { scope: ref });
 
   return (
     <section
-      ref={containerRef}
-      className="relative w-full h-screen min-h-[800px] flex flex-col pt-8 px-6 md:px-16 lg:px-24 border-b border-black/10 bg-[#0a0a0a] overflow-hidden"
+      ref={ref}
+      className="relative w-full flex flex-col"
+      style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
     >
-      {/* The Wrapper controls the clip-path mask */}
-      <div
-        className="hero-img-wrap absolute inset-0 z-0 overflow-hidden md:-top-15"
-        style={{
-          clipPath:
-            "inset(100% 0% 0% 0%)",
-        }}
-      >
-        <img
-          src="/hero/cargo-ship-sailing-ocean.webp"
-          alt="Cargo Ship Aerial"
-          className="hero-bg-img w-full h-full object-cover opacity-70"
-        />
-        <div className="absolute inset-0 bg-gradient-to-r from-[#0a0a0a] via-[#0a0a0a]/60 to-transparent pointer-events-none" />
-        <div className="absolute inset-0 bg-gradient-to-t from-[#0a0a0a] via-transparent to-transparent pointer-events-none" />
-      </div>
-
-      <div className="relative z-20 w-full max-w-7xl mx-auto flex flex-col justify-center h-full pb-32 mt-24">
-        <span className="hero-fade text-cyan-400 uppercase tracking-[0.3em] text-[10px] md:text-xs font-bold mb-6 block">
-          // Since 1978
-        </span>
-
-        {/* ADDED: CSS Perspective wrapper to allow 3D tilting */}
-        <div
-          style={{
-            perspective: "1000px",
-          }}
-        >
-          {/* ADDED: .interactive-text-group acts as the 3D moving layer */}
-          <h1 className="interactive-text-group text-[12vw] md:text-8xl lg:text-[9rem] font-black uppercase leading-[0.85] tracking-tighter m-0 flex flex-col origin-center transform-style-3d">
-            <div className="overflow-hidden pb-2">
-              <span className="hero-text-line block text-white origin-bottom-left">
-                Redefining
-              </span>
-            </div>
-
-            <div className="overflow-hidden pb-2">
-              <div className="hero-text-line flex items-center gap-4 md:gap-8 origin-bottom-left">
+      {/* Masthead block */}
+      <div className="pt-28 md:pt-32 px-6 md:px-12 lg:px-16">
+        <div className="max-w-[1500px] mx-auto">
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink-30)" }}
+          />
+          <div className="flex items-center justify-between gap-4 py-3">
+            <div className="h-kicker flex items-center gap-3 md:gap-6 min-w-0">
+              <div className="flex items-center gap-3 min-w-0">
                 <span
-                  style={{
-                    WebkitTextStroke:
-                      "2px rgba(255,255,255,0.8)",
-                    color:
-                      "transparent",
-                  }}
-                >
-                  The
-                </span>
-                <span className="text-white">
-                  Horizon
+                  className="h-[6px] w-[6px] rounded-full shrink-0"
+                  style={{ backgroundColor: "var(--color-marine)" }}
+                />
+                <span className="caption text-[var(--color-ink-70)] truncate">
+                  <span className="sm:hidden">Since 1978</span>
+                  <span className="hidden sm:inline">
+                    Marine Infrastructure · Since 1978
+                  </span>
                 </span>
               </div>
+              <span className="caption text-[var(--color-ink-40)] hidden lg:inline shrink-0">
+                Flagship of the Meka Group
+              </span>
             </div>
+            <span className="h-kicker caption text-[var(--color-ink-40)] tabular hidden md:block shrink-0">
+              Selected works / 03 of 12
+            </span>
+          </div>
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink-12)" }}
+          />
+        </div>
+      </div>
+
+      {/* Headline */}
+      <div className="px-6 md:px-12 lg:px-16 pt-10 md:pt-14">
+        <div className="max-w-[1500px] mx-auto">
+          <h1 className="font-display leading-[0.94] tracking-[-0.02em] text-[12vw] md:text-[7.8vw] lg:text-[6vw]">
+            <span className="reveal-line">
+              <span className="h-line block">
+                We build where the{" "}
+                <em
+                  className="italic"
+                  style={{ color: "var(--color-marine)" }}
+                >
+                  land
+                </em>
+              </span>
+            </span>
+            <span className="reveal-line">
+              <span className="h-line block">
+                meets the{" "}
+                <em
+                  className="italic"
+                  style={{ color: "var(--color-marine)" }}
+                >
+                  sea.
+                </em>
+              </span>
+            </span>
           </h1>
         </div>
+      </div>
 
-        <div className="hero-fade flex flex-col md:flex-row items-start md:items-center gap-8 md:gap-12 mt-12 md:mt-16">
-          <button
-            onClick={() =>
-              navigate("/projects")
-            }
-            className="bg-white text-black px-8 py-4 text-xs font-bold uppercase tracking-[0.15em] hover:bg-cyan-500 hover:text-white transition-colors duration-500"
-          >
-            Explore Projects
-          </button>
-          <div className="flex items-center gap-4">
-            <div className="w-12 h-[1px] bg-white/30"></div>
-            <span className="text-white/60 text-xs tracking-widest uppercase">
-              Specialized Marine
-              Infrastructure
-            </span>
+      {/* Triptych of works */}
+      <div className="px-6 md:px-12 lg:px-16 pt-10 md:pt-14">
+        <div className="max-w-[1500px] mx-auto">
+          <div className="grid grid-cols-12 gap-4 md:gap-5">
+            <HeroTile
+              work={triptych[0]}
+              index={0}
+              active={activeTile}
+              setActive={setActiveTile}
+              className="col-span-12 md:col-span-7"
+              heightClass="h-[360px] md:h-[500px] lg:h-[580px]"
+            />
+            <div className="col-span-12 md:col-span-5 grid grid-cols-2 md:grid-cols-1 gap-4 md:gap-5">
+              <HeroTile
+                work={triptych[1]}
+                index={1}
+                active={activeTile}
+                setActive={setActiveTile}
+                heightClass="h-[260px] md:h-[242px] lg:h-[282px]"
+              />
+              <HeroTile
+                work={triptych[2]}
+                index={2}
+                active={activeTile}
+                setActive={setActiveTile}
+                heightClass="h-[260px] md:h-[242px] lg:h-[282px]"
+              />
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Lower: description + CTAs */}
+      <div className="px-6 md:px-12 lg:px-16 pt-14 md:pt-20 pb-16 md:pb-20">
+        <div className="max-w-[1500px] mx-auto h-lower grid grid-cols-12 gap-6 md:gap-10">
+          <p className="col-span-12 md:col-span-6 text-[17px] md:text-[20px] leading-[1.55] text-[var(--color-ink-70)] max-w-xl">
+            The flagship marine-construction firm of the Meka Group — delivering
+            breakwaters, jetties and deepwater works across India and
+            international waters since 1978.
+          </p>
+
+          <div className="col-span-12 md:col-span-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 md:justify-end">
+            <Button to="/projects" variant="primary">
+              Browse our works
+            </Button>
+            <Button to="/contact" variant="ghost">
+              Start a project
+            </Button>
+          </div>
+        </div>
+      </div>
+
+      {/* Trust strip */}
+      <div
+        className="border-t"
+        style={{ borderColor: "var(--color-ink-12)" }}
+      >
+        <div className="max-w-[1500px] mx-auto px-6 md:px-12 lg:px-16 py-6 md:py-8">
+          <div className="grid grid-cols-2 md:grid-cols-4 gap-x-6 gap-y-6 md:gap-x-10">
+            {trustStats.map((s, i) => (
+              <div
+                key={s.l}
+                className={`flex items-baseline gap-3 md:gap-4 ${
+                  i !== 0 ? "md:pl-10 md:border-l" : ""
+                }`}
+                style={i !== 0 ? { borderColor: "var(--color-ink-12)" } : {}}
+              >
+                <span className="font-display tabular text-[26px] sm:text-[30px] md:text-[38px] lg:text-[42px] leading-none text-[var(--color-ink)] shrink-0">
+                  {s.n}
+                </span>
+                <span className="caption text-[var(--color-ink-70)] leading-[1.35] max-w-[20ch] break-words">
+                  {s.l}
+                </span>
+              </div>
+            ))}
           </div>
         </div>
       </div>

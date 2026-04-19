@@ -1,192 +1,291 @@
-import React, { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import { useRef, useEffect } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { useLocation } from "react-router";
+import Button from "../../components/ui/Button";
+import SEO from "../../components/common/SEO";
+import { services } from "../../data/services";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const Services = () => {
-  const pageRef = useRef(null);
+const servicesJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ItemList",
+  name: "Amma Lines services",
+  url: "https://ammalines.com/services",
+  numberOfItems: services.length,
+  itemListElement: services.map((s, i) => ({
+    "@type": "ListItem",
+    position: i + 1,
+    name: s.title,
+    url: `https://ammalines.com/services#${s.slug}`,
+    description: s.body,
+  })),
+};
 
-  // Real comprehensive services data from Amma Lines
-  const servicesData = [
-    {
-      title: 'Breakwater Construction',
-      description: 'Specialized design and execution of durable breakwater structures that protect coastlines, commercial ports, and harbors from the devastating impact of strong waves, tidal surges, and erosion.',
-      img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=1000&auto=format&fit=crop'
-    },
-    {
-      title: 'Marine Piling Systems',
-      description: 'Delivering expert piling and sheet piling solutions that form the backbone of strong, sustainable marine and civil structures. Engineered for absolute earth retention and deep-sea stability.',
-      img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=1000&auto=format&fit=crop'
-    },
-    {
-      title: 'Jetty Engineering',
-      description: 'Constructing robust Block, Pile, and RO-RO jetties designed to withstand harsh coastal conditions while enabling the smooth, high-capacity transfer of wheeled cargo and heavy vehicles.',
-      img: '/hero/elephanta_jetty.webp' // Assuming this local asset exists based on previous pages
-    },
-    {
-      title: 'Caisson & Cofferdams',
-      description: 'Advanced sub-sea engineering providing safe, dry, and stable working conditions for underwater projects, utilizing massive caisson foundations built with highly durable materials.',
-      img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop'
-    },
-    {
-      title: 'Deepwater Dredging',
-      description: 'Vital processes for maintaining safe, navigable waterways and enhancing port efficiency. We deploy modern, high-capacity fleets capable of surgical precision on the ocean floor.',
-      img: 'https://images.unsplash.com/photo-1621516762394-44b419401f80?q=80&w=1000&auto=format&fit=crop'
-    },
-    {
-      title: 'Soil Improvement & Well Sinking',
-      description: 'Crucial preparatory processes in marine and coastal construction, ensuring unshakeable foundations and long-lasting stability for exceptionally heavy infrastructure.',
-      img: 'https://images.unsplash.com/photo-1577983696515-b6d85a153835?q=80&w=1000&auto=format&fit=crop'
+const Services = () => {
+  const ref = useRef(null);
+  const { hash } = useLocation();
+
+  useEffect(() => {
+    if (!hash) return;
+    const id = hash.replace("#", "");
+    const el = document.getElementById(id);
+    if (el) {
+      setTimeout(() => {
+        el.scrollIntoView({ behavior: "smooth", block: "start" });
+      }, 400);
     }
-  ];
+  }, [hash]);
 
   useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-
-    // 1. Page Header Reveal
-    tl.fromTo('.page-title', 
-      { y: '120%', rotate: 2 }, 
-      { y: '0%', rotate: 0, duration: 1.5, stagger: 0.1, delay: 0.2 }
-    )
-    .fromTo('.page-fade', 
-      { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, duration: 1, stagger: 0.1 }, 
-      '-=1'
+    gsap.fromTo(
+      ".s-line",
+      { y: "110%" },
+      { y: "0%", duration: 1.2, stagger: 0.07, ease: "power2.out", delay: 0.2 }
     );
+    gsap.from(".s-fade", {
+      opacity: 0,
+      y: 16,
+      duration: 1,
+      stagger: 0.07,
+      delay: 0.5,
+      ease: "power3.out",
+    });
 
-    // 2. Service Rows Scroll Reveal
-    const rows = gsap.utils.toArray('.service-row');
+    const rows = gsap.utils.toArray(".s-row");
     rows.forEach((row) => {
-      // Animate the text content of the row
-      gsap.fromTo(row.querySelector('.service-content'),
-        { y: 50, opacity: 0 },
+      gsap.fromTo(
+        row.querySelector(".s-content"),
+        { y: 36, opacity: 0 },
         {
           y: 0,
           opacity: 1,
-          duration: 1.2,
-          ease: 'expo.out',
-          scrollTrigger: {
-            trigger: row,
-            start: 'top 85%',
-          }
+          duration: 1,
+          ease: "power2.out",
+          scrollTrigger: { trigger: row, start: "top 85%" },
         }
       );
-
-      // Animate the image mask & parallax
-      const imgWrap = row.querySelector('.img-wrap');
-      const img = row.querySelector('img');
-
-      if(imgWrap && img) {
-        gsap.fromTo(imgWrap,
-          { clipPath: 'inset(100% 0% 0% 0%)' },
+      const wrap = row.querySelector(".s-img-wrap");
+      const img = row.querySelector("img");
+      if (wrap && img) {
+        gsap.fromTo(
+          wrap,
+          { clipPath: "inset(100% 0% 0% 0%)" },
           {
-            clipPath: 'inset(0% 0% 0% 0%)',
-            duration: 1.5,
-            ease: 'expo.inOut',
-            scrollTrigger: { trigger: row, start: 'top 75%' }
+            clipPath: "inset(0% 0% 0% 0%)",
+            duration: 1.4,
+            ease: "power2.inOut",
+            scrollTrigger: { trigger: row, start: "top 80%" },
           }
         );
-
-        gsap.fromTo(img,
-          { y: '-10%' },
+        gsap.fromTo(
+          img,
+          { y: "-8%" },
           {
-            y: '10%',
-            ease: 'none',
+            y: "8%",
+            ease: "none",
             scrollTrigger: {
               trigger: row,
-              start: 'top bottom',
-              end: 'bottom top',
+              start: "top bottom",
+              end: "bottom top",
               scrub: true,
-            }
+            },
           }
         );
       }
     });
-
-  }, { scope: pageRef });
+  }, { scope: ref });
 
   return (
-    <main ref={pageRef} className="w-full bg-white text-black min-h-screen flex flex-col pt-32 overflow-hidden">
-      
-      {/* ================= HEADER SECTION ================= */}
-      <section className="px-6 md:px-16 lg:px-24 pb-24 border-b border-black/10 flex flex-col md:flex-row md:items-end justify-between gap-12">
-        <div>
-          <span className="page-fade text-cyan-600 uppercase tracking-[0.3em] text-[10px] font-bold mb-6 block">
-            [ What We Do ]
-          </span>
-          <div className="overflow-hidden pb-2">
-            <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none origin-bottom-left block">
-              Engineering
-            </h1>
+    <>
+      <SEO
+        title="Services"
+        description="Twelve disciplines delivered in-house by Amma Lines — breakwaters, piling, sheet piling, pile jetties, block jetties, RO-RO jetties, cofferdams, caissons, well sinking, dredging, soil improvement and technical services."
+        path="/services"
+        jsonLd={servicesJsonLd}
+        jsonLdId="ld-services"
+      />
+      <main
+        ref={ref}
+        className="w-full min-h-screen overflow-hidden"
+        style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
+      >
+      {/* Masthead */}
+      <div className="px-6 md:px-12 lg:px-16 pt-32 md:pt-40">
+        <div className="max-w-[1500px] mx-auto">
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink)" }}
+          />
+          <div className="flex items-center justify-between py-3">
+            <span className="caption text-[var(--color-ink)]">
+              III · Services
+            </span>
+            <span className="caption text-[var(--color-ink-50)] hidden md:inline">
+              Twelve Disciplines, In-House
+            </span>
+            <span className="caption tabular text-[var(--color-ink-50)]">
+              01 — 12
+            </span>
           </div>
-          <div className="overflow-hidden pb-2">
-            <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none origin-bottom-left block">
-              <span style={{ WebkitTextStroke: '2px rgba(0,0,0,0.8)', color: 'transparent' }}>
-                The Deep.
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink-12)" }}
+          />
+        </div>
+      </div>
+
+      {/* Lede */}
+      <section className="px-6 md:px-12 lg:px-16 pt-12 md:pt-20 pb-16 md:pb-24">
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
+          <div className="col-span-12 md:col-span-3">
+            <p className="s-fade caption text-[var(--color-ink-50)]">
+              What we practice
+            </p>
+          </div>
+          <div className="col-span-12 md:col-span-9">
+            <h1 className="font-display text-6xl md:text-8xl lg:text-[8.5rem] leading-[0.95] tracking-[-0.02em]">
+              <span className="reveal-line">
+                <span className="s-line block">Twelve disciplines</span>
+              </span>
+              <span className="reveal-line">
+                <span className="s-line block italic text-[var(--color-ink-70)]">
+                  one practice
+                </span>
+              </span>
+              <span className="reveal-line">
+                <span className="s-line block">under one roof.</span>
               </span>
             </h1>
+
+            <p className="s-fade mt-12 max-w-2xl text-[17px] md:text-[19px] leading-relaxed text-[var(--color-ink-70)]">
+              Every discipline below is delivered by our own engineers,
+              crews and fleet. We do not mediate marine works.
+            </p>
           </div>
         </div>
-        
-        <p className="page-fade max-w-sm text-sm text-black/60 leading-relaxed font-light pb-2">
-          Providing a wide range of innovative, resilient, and sustainable solutions for the global marine infrastructure sector.
-        </p>
       </section>
 
-      {/* ================= SERVICES LIST ================= */}
-      <section className="px-6 md:px-16 lg:px-24 py-24 md:py-32 bg-gray-50">
-        <div className="max-w-7xl mx-auto flex flex-col">
-          
-          {servicesData.map((service, index) => (
-            <div 
-              key={index} 
-              className="service-row group flex flex-col lg:flex-row items-start lg:items-center justify-between py-16 md:py-24 border-t border-black/10 first:border-t-0 gap-12 lg:gap-24"
+      {/* Index */}
+      <section
+        className="px-6 md:px-12 lg:px-16 py-8 border-y"
+        style={{
+          backgroundColor: "var(--color-paper)",
+          borderColor: "var(--color-ink-12)",
+        }}
+      >
+        <div className="max-w-[1500px] mx-auto grid grid-cols-2 md:grid-cols-4 lg:grid-cols-6 gap-x-4 gap-y-3 md:gap-x-6">
+          {services.map((s) => (
+            <a
+              key={s.n}
+              href={`#${s.slug}`}
+              className="flex items-baseline gap-2 group"
             >
-              
-              {/* Text Content */}
-              <div className="service-content flex-1 flex flex-col md:flex-row gap-8 md:gap-16 items-start">
-                <span className="text-4xl md:text-6xl font-light text-black/10 group-hover:text-cyan-600 transition-colors duration-500 font-mono">
-                  0{index + 1}
-                </span>
-                
-                <div className="flex flex-col gap-6 max-w-xl">
-                  <h2 className="text-3xl md:text-5xl font-black uppercase tracking-tighter text-black group-hover:translate-x-4 transition-transform duration-500">
-                    {service.title}
-                  </h2>
-                  <p className="text-sm md:text-base text-black/60 leading-relaxed font-light">
-                    {service.description}
-                  </p>
-                  
-                  {/* Subtle Action Link */}
-                  <div className="mt-4">
-                    <button className="flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-black/40 group-hover:text-black transition-colors">
-                      <span>Explore Capability</span>
-                      <svg className="w-4 h-4 transform group-hover:translate-x-2 transition-transform" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M17 8l4 4m0 0l-4 4m4-4H3" /></svg>
-                    </button>
-                  </div>
-                </div>
-              </div>
-
-              {/* Parallax Image Mask (Reveals beautifully on scroll) */}
-              <div className="w-full lg:w-[400px] h-[300px] md:h-[400px] relative overflow-hidden flex-shrink-0 bg-black/5">
-                <div className="img-wrap absolute inset-0 w-full h-full origin-bottom">
-                  <img 
-                    src={service.img} 
-                    alt={service.title} 
-                    className="w-full h-full object-cover scale-[1.15] grayscale group-hover:grayscale-0 transition-all duration-700" 
-                  />
-                </div>
-              </div>
-
-            </div>
+              <span className="caption tabular text-[var(--color-ink-40)]">
+                /{s.n}
+              </span>
+              <span className="caption text-[var(--color-ink-70)] group-hover:text-[var(--color-marine)] transition-colors">
+                {s.title}
+              </span>
+            </a>
           ))}
-
         </div>
       </section>
 
-    </main>
+      {/* Services list */}
+      <section className="px-6 md:px-12 lg:px-16">
+        <div className="max-w-[1500px] mx-auto flex flex-col">
+          {services.map((s, i) => (
+            <article
+              key={s.slug}
+              id={s.slug}
+              className={`s-row scroll-mt-28 grid grid-cols-12 gap-6 md:gap-10 py-20 md:py-28 ${
+                i !== 0 ? "border-t border-[var(--color-ink-12)]" : ""
+              }`}
+            >
+              <div className="col-span-12 md:col-span-2 flex md:flex-col justify-between md:justify-start gap-4 md:gap-10">
+                <span className="caption tabular text-[var(--color-ink-40)]">
+                  / {s.n}
+                </span>
+                <span className="caption text-[var(--color-ink-70)]">
+                  {s.short}
+                </span>
+              </div>
+
+              <div className="s-content col-span-12 md:col-span-5 flex flex-col gap-6">
+                <h2 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05]">
+                  {s.title}
+                </h2>
+                <p className="text-[17px] leading-relaxed text-[var(--color-ink-70)] max-w-xl">
+                  {s.body}
+                </p>
+                <ul className="mt-2 flex flex-col gap-1">
+                  {s.deliverables.map((d) => (
+                    <li
+                      key={d}
+                      className="flex items-start gap-3 text-[14px] leading-relaxed text-[var(--color-ink-70)] border-t border-[var(--color-ink-12)] pt-2 first:border-t-0 first:pt-0"
+                    >
+                      <span className="caption tabular text-[var(--color-ink-40)] pt-[2px]">
+                        —
+                      </span>
+                      <span>{d}</span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+
+              <figure className="col-span-12 md:col-span-5">
+                <div className="s-img-wrap overflow-hidden w-full h-[360px] md:h-[460px] bg-[var(--color-ink-08)]">
+                  <img loading="lazy" decoding="async"
+                    src={s.img}
+                    alt={s.title}
+                    className="w-full h-full object-cover scale-[1.08] duotone"
+                  />
+                </div>
+                <figcaption className="mt-3 flex items-start justify-between gap-4 caption text-[var(--color-ink-50)]">
+                  <span>
+                    Fig. {s.n} · {s.title}
+                  </span>
+                  <span className="tabular">In-house</span>
+                </figcaption>
+              </figure>
+            </article>
+          ))}
+        </div>
+      </section>
+
+      {/* CTA */}
+      <section
+        className="px-6 md:px-12 lg:px-16 py-28 md:py-40 border-t"
+        style={{
+          backgroundColor: "var(--color-ink)",
+          color: "var(--color-bone)",
+          borderColor: "var(--color-ink-12)",
+        }}
+      >
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-6 items-end">
+          <div className="col-span-12 md:col-span-9">
+            <p className="caption text-[var(--color-bone-50)] mb-6">
+              Technical enquiry
+            </p>
+            <h2 className="font-display text-5xl md:text-7xl leading-[1.05]">
+              Considering a marine work?<br />
+              <em className="italic text-[var(--color-bone-70)]">
+                Let us walk the site with you.
+              </em>
+            </h2>
+          </div>
+          <div className="col-span-12 md:col-span-3 flex md:justify-end">
+            <Button to="/contact" variant="primary-light">
+              Begin a conversation
+            </Button>
+          </div>
+        </div>
+      </section>
+      </main>
+    </>
   );
 };
 

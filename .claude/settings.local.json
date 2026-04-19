@@ -1,0 +1,13 @@
+{
+  "permissions": {
+    "allow": [
+      "Bash(claude update *)",
+      "Bash(npm run *)",
+      "Bash(kill %1)",
+      "WebFetch(domain:www.ammalines.com)",
+      "WebFetch(domain:ammalines.com)",
+      "Bash(npm install *)",
+      "Bash(npm cache *)"
+    ]
+  }
+}

@@ -1,43 +1,46 @@
-import React, { useRef } from "react";
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
-
+import SEO from "../../components/common/SEO";
 import HeroSection from "./components/HeroSection";
+import MarqueeSection from "./components/MarqueeSection";
+import FeatureProjectSection from "./components/FeatureProjectSection";
 import VisionSection from "./components/VisionSection";
+import StatsSection from "./components/StatsSection";
 import PortfolioSection from "./components/PortfolioSection";
 import ExpertiseSection from "./components/ExpertiseSection";
+import DispatchesSection from "./components/DispatchesSection";
+
+const homeJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "Organization",
+  name: "Amma Lines",
+  url: "https://ammalines.com",
+  description:
+    "Flagship marine construction firm of the Meka Group. Breakwaters, jetties, deepwater dredging and port development across India and international waters since 1978.",
+};
 
 const LandingPage = () => {
-  const mainRef = useRef(null);
-
-  useGSAP(() => {
-    gsap.to(mainRef.current, {
-      backgroundColor: '#ffffff',
-      color: '#000000',
-      ease: "none",
-      scrollTrigger: {
-        trigger: '#vision',
-        start: 'top bottom',
-        end: 'top 25%',
-        // PERFORMANCE FIX: Change from true to 1. This smooths out the calculation.
-        scrub: 1, 
-      }
-    });
-  }, { scope: mainRef });
-
   return (
-   
-      <main 
-        ref={mainRef} 
-        // PERFORMANCE FIX: Added 'will-change-background' to tell the browser to prepare for this animation
-        className="w-full bg-[#0a0a0a] text-white font-sans antialiased overflow-x-hidden style={{ willChange: 'background-color, color' }}"
+    <>
+      <SEO
+        title=""
+        description="Amma Lines — flagship marine construction firm of the Meka Group. Breakwaters, jetties and deepwater dredging across India and international waters since 13 December 1978."
+        path="/"
+        jsonLd={homeJsonLd}
+        jsonLdId="ld-home"
+      />
+      <main
+        className="w-full overflow-x-hidden"
+        style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
       >
         <HeroSection />
+        <MarqueeSection />
+        <FeatureProjectSection />
         <VisionSection />
+        <StatsSection />
         <PortfolioSection />
         <ExpertiseSection />
+        <DispatchesSection />
       </main>
+    </>
   );
 };
 

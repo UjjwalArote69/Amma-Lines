@@ -1,228 +1,375 @@
-import React, { useRef, useState } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import { useRef, useState, useMemo } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { projects, projectFilters } from "../../data/projects";
+import SEO from "../../components/common/SEO";
 
 gsap.registerPlugin(ScrollTrigger);
 
-// Move data outside so it doesn't re-initialize on every render
-const projectList = [
-  // --- ORIGINAL LIST ---
-  { title: 'JNPT, Navi Mumbai', category: 'Breakwaters', status: '1988', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
-  { title: 'Ennore Port, Chennai', category: 'Breakwaters', status: '1988', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
-  { title: 'Karaikal Port', category: 'Breakwaters', status: '2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]' },
-  { title: 'Project Seabird - Karwar', category: 'Breakwaters', status: '2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]' },
-  { title: 'Amadalli', category: 'Building Construction', status: '2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]' },
-  { title: 'JNPT Floating Breakwater', category: 'Breakwaters', status: 'Delivered', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[500px]' },
-  { title: 'Ennore Port Navigation Channel', category: 'Capital Dredging', status: 'Completed', img: '/hero/ennore_port.webp', height: 'h-[700px]' },
-  { title: 'Rasulpur Deep Sea Port', category: 'Port Development', status: 'Planning', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[450px]' },
-  { title: 'Redi Port Phase II', category: 'Capital Dredging', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[550px]' },
-
-  // --- COMPLETED CONSTRUCTION PROJECTS ---
-  { title: 'Hazira Plant Outfitting Jetty-2', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1621516762394-44b419401f80?q=80&w=1000&auto=format&fit=crop', height: 'h-[500px]' },
-  { title: 'Fisheries Harbour, Karwar', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[600px]' },
-  { title: 'Revdanda Approach & Caisson Bridge', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[450px]' },
-  { title: 'Elephanta Island Passenger Jetty', category: 'Jetties', status: 'Completed', img: '/hero/elephanta_jetty.webp', height: 'h-[400px]' },
-  { title: 'Glencore Barge Terminal, Mumbai', category: 'Jetties', status: 'Completed', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[550px]' },
-  { title: 'Dahanu Thermal Power Cooling System', category: 'Port Development', status: 'Completed', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[650px]' },
-  { title: 'Orkay Silk Mills, Patalganga', category: 'Building Construction', status: 'Completed', img: 'https://images.unsplash.com/photo-1577983696515-b6d85a153835?q=80&w=1000&auto=format&fit=crop', height: 'h-[400px]' },
-  { title: 'Naiknagar Nalla Training', category: 'Building Construction', status: 'Completed', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[500px]' },
-
-  // --- COMPLETED DREDGING PROJECTS ---
-  { title: 'Mithi River Deepening, Mahim', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1621516762394-44b419401f80?q=80&w=1000&auto=format&fit=crop', height: 'h-[450px]' },
-  { title: 'Mazagon Dock Rock Blasting', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
-  { title: 'River Tapti, Hazira', category: 'Dredging', status: 'Completed', img: '/hero/ennore_port.webp', height: 'h-[500px]' },
-  { title: 'Thane Creek Pipeline Trench', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1543881528-9e5309d4351a?q=80&w=800&auto=format&fit=crop', height: 'h-[400px]' },
-  { title: 'Dabhol, Varsova & Gorai', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[550px]' },
-  { title: 'Koyna Hydroelectric Rock Bund', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1582215684347-2e1d70e61d85?q=80&w=800&auto=format&fit=crop', height: 'h-[650px]' },
-  { title: 'Dharamtar Creek Wharf Channels', category: 'Dredging', status: 'Completed', img: 'https://images.unsplash.com/photo-1621516762394-44b419401f80?q=80&w=1000&auto=format&fit=crop', height: 'h-[400px]' },
-
-  // --- ONGOING / LATEST PROJECTS ---
-  { title: 'Dahej Offshore HDPE Pipeline', category: 'Port Development', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1505705694340-019e1e335916?q=80&w=1000&auto=format&fit=crop', height: 'h-[600px]' },
-  { title: 'Perur 400 MLD SWRO Plant', category: 'Breakwaters', status: 'Ongoing', img: '/hero/karaikal_port.webp', height: 'h-[700px]' },
-  { title: 'NFXP Trenching, Offshore Qatar', category: 'Dredging', status: 'Ongoing', img: 'https://images.unsplash.com/photo-1551524164-687a55dd1126?q=80&w=1000&auto=format&fit=crop', height: 'h-[500px]' },
-];
-
-const filters = ['All Works', 'Breakwaters', 'Dredging', 'Jetties', 'Port Development'];
+const projectsJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "CollectionPage",
+  name: "Amma Lines — Selected Works",
+  url: "https://ammalines.com/projects",
+  description:
+    "A register of 12 documented marine infrastructure works delivered by Amma Lines between 1988 and 2024 — breakwaters, jetties, deepwater dredging.",
+  mainEntity: {
+    "@type": "ItemList",
+    numberOfItems: projects.length,
+    itemListElement: projects.map((p, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: `${p.title} — ${p.location}`,
+    })),
+  },
+};
 
 const Projects = () => {
-  const pageRef = useRef(null);
-  
-  // 1. Setup React State for the active filter
-  const [activeFilter, setActiveFilter] = useState('All Works');
+  const ref = useRef(null);
+  const [active, setActive] = useState("All works");
+  const [view, setView] = useState("grid");
 
-  // 2. Filter the projects dynamically based on the active state
-  const displayedProjects = activeFilter === 'All Works' 
-    ? projectList 
-    : projectList.filter(proj => proj.category.toLowerCase().includes(activeFilter.toLowerCase()));
+  const displayed = useMemo(() => {
+    return active === "All works"
+      ? projects
+      : projects.filter((p) => p.category === active);
+  }, [active]);
 
-  // ==============================================================
-  // ANIMATION BLOCK 1: Page Load (Runs only once)
-  // ==============================================================
   useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-
-    tl.fromTo('.page-title', 
-      { y: '120%', rotate: 2 }, 
-      { y: '0%', rotate: 0, duration: 1.5, stagger: 0.1, delay: 0.2 }
-    )
-    .fromTo('.page-fade', 
-      { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, duration: 1, stagger: 0.1 }, 
-      '-=1'
+    gsap.fromTo(
+      ".p-title-line",
+      { y: "110%" },
+      { y: "0%", duration: 1.2, stagger: 0.08, ease: "power2.out", delay: 0.2 }
     );
-  }, { scope: pageRef }); // No dependencies, runs once
+    gsap.from(".p-fade", {
+      opacity: 0,
+      y: 16,
+      duration: 1,
+      stagger: 0.08,
+      delay: 0.6,
+      ease: "power3.out",
+    });
+  }, { scope: ref });
 
-  // ==============================================================
-  // ANIMATION BLOCK 2: Grid Reloads (Runs when state changes)
-  // ==============================================================
   useGSAP(() => {
-    const cards = gsap.utils.toArray('.project-card');
-
-    // Optional: Refresh ScrollTrigger so it recalculates heights for the new grid layout
+    if (view !== "grid") return;
     ScrollTrigger.refresh();
 
+    const cards = gsap.utils.toArray(".p-card");
     cards.forEach((card) => {
-      const imgWrap = card.querySelector('.img-wrap');
-      const img = card.querySelector('img');
-
-      // Mask Reveal for each project as you scroll down
-      gsap.fromTo(imgWrap,
-        { clipPath: 'inset(100% 0% 0% 0%)' },
+      const wrap = card.querySelector(".p-img-wrap");
+      const img = card.querySelector("img");
+      if (!wrap || !img) return;
+      gsap.fromTo(
+        wrap,
+        { clipPath: "inset(100% 0% 0% 0%)" },
         {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          duration: 1.5,
-          ease: 'expo.inOut',
-          scrollTrigger: { 
-            trigger: card, 
-            start: 'top 85%' 
-          }
+          clipPath: "inset(0% 0% 0% 0%)",
+          duration: 1.3,
+          ease: "power2.inOut",
+          scrollTrigger: { trigger: card, start: "top 88%" },
         }
       );
-
-      // Subtle Image Parallax Effect
-      gsap.fromTo(img,
-        { y: '-10%' },
+      gsap.fromTo(
+        img,
+        { y: "-6%" },
         {
-          y: '10%',
-          ease: 'none',
+          y: "6%",
+          ease: "none",
           scrollTrigger: {
             trigger: card,
-            start: 'top bottom',
-            end: 'bottom top',
+            start: "top bottom",
+            end: "bottom top",
             scrub: true,
-          }
+          },
         }
       );
     });
-  }, { scope: pageRef, dependencies: [activeFilter] }); 
-  // ^^^ The dependencies array tells GSAP to clean up and re-run these animations when activeFilter changes
+  }, { scope: ref, dependencies: [active, view] });
 
   return (
-    <main ref={pageRef} className="w-full bg-white text-black min-h-screen flex flex-col pt-32 overflow-hidden">
-      
-      {/* ================= HEADER SECTION ================= */}
-      <section className="px-6 md:px-16 lg:px-24 pb-24 flex flex-col md:flex-row md:items-end justify-between gap-12">
-        <div>
-          <span className="page-fade text-cyan-600 uppercase tracking-[0.3em] text-[10px] font-bold mb-6 block">
-            [ Our Work ]
-          </span>
-          
-          <div className="overflow-hidden pb-2">
-            <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none origin-bottom-left block">
-              108+
-            </h1>
+    <>
+      <SEO
+        title="Selected Works"
+        description="A chronology of 12 documented marine works from Amma Lines: JNPT, Ennore, Karaikal, Elephanta, Hazira, Kochi, Kakinada and the ongoing North Field Expansion in Qatar."
+        path="/projects"
+        jsonLd={projectsJsonLd}
+        jsonLdId="ld-projects"
+      />
+      <main
+        ref={ref}
+        className="w-full min-h-screen overflow-hidden"
+        style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
+      >
+      {/* Masthead */}
+      <div className="px-6 md:px-12 lg:px-16 pt-32 md:pt-40">
+        <div className="max-w-[1500px] mx-auto">
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink)" }}
+          />
+          <div className="flex items-center justify-between py-3">
+            <span className="caption text-[var(--color-ink)]">
+              IV · Projects
+            </span>
+            <span className="caption text-[var(--color-ink-50)] hidden md:inline">
+              Selected works · 1988 — 2024
+            </span>
+            <span className="caption tabular text-[var(--color-ink-50)]">
+              {projects.length} documented works
+            </span>
           </div>
-          <div className="overflow-hidden pb-2">
-            <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none origin-bottom-left block">
-              <span style={{ WebkitTextStroke: '2px rgba(0,0,0,0.8)', color: 'transparent' }}>
-                Delivered.
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink-12)" }}
+          />
+        </div>
+      </div>
+
+      {/* Lede */}
+      <section className="px-6 md:px-12 lg:px-16 pt-12 md:pt-20 pb-16 md:pb-20">
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
+          <div className="col-span-12 md:col-span-3">
+            <p className="p-fade caption text-[var(--color-ink-50)]">
+              The register
+            </p>
+          </div>
+          <div className="col-span-12 md:col-span-9">
+            <h1 className="font-display text-6xl md:text-8xl lg:text-[8.5rem] leading-[0.95] tracking-[-0.02em]">
+              <span className="reveal-line">
+                <span className="p-title-line block">Breakwaters, jetties</span>
+              </span>
+              <span className="reveal-line">
+                <span className="p-title-line block italic text-[var(--color-ink-70)]">
+                  and deepwater works
+                </span>
+              </span>
+              <span className="reveal-line">
+                <span className="p-title-line block">since 1988.</span>
               </span>
             </h1>
+            <p className="p-fade mt-10 max-w-2xl text-[17px] md:text-[19px] leading-relaxed text-[var(--color-ink-70)]">
+              A selection of documented works — from the 650-metre floating
+              breakwater at JNPT to the ongoing North Field Expansion
+              trenching in Qatar. This register shows {projects.length} cited
+              projects; our full delivered-works list is larger.
+            </p>
           </div>
-        </div>
-        
-        {/* ================= INTERACTIVE FILTER OPTIONS ================= */}
-        <div className="page-fade flex flex-wrap gap-6 text-xs uppercase tracking-widest text-black/50 mb-4">
-          {filters.map((filter) => (
-            <button 
-              key={filter}
-              onClick={() => setActiveFilter(filter)}
-              // Dynamic classes to highlight the active tab
-              className={`pb-1 transition-all duration-300 ${
-                activeFilter === filter 
-                  ? 'text-cyan-600 border-b border-cyan-600 font-bold' 
-                  : 'hover:text-black hover:border-b hover:border-black/30'
-              }`}
-            >
-              {filter}
-            </button>
-          ))}
         </div>
       </section>
 
-      {/* ================= MASONRY GRID SECTION ================= */}
-      <section className="px-6 md:px-16 lg:px-24 pb-32 border-t border-black/10 pt-24 min-h-screen">
-        
-        {displayedProjects.length > 0 ? (
-          <div className="columns-1 md:columns-2 lg:columns-3 gap-8 space-y-8">
-            {displayedProjects.map((proj) => (
-              <div key={`${proj.title}-${activeFilter}`} className="project-card group cursor-pointer break-inside-avoid relative flex flex-col">
-                
-                <div className={`relative overflow-hidden w-full ${proj.height} mb-4 bg-gray-50`}>
-                  <div className="img-wrap absolute inset-0 w-full h-full origin-bottom">
-                     <img 
-                       src={proj.img} 
-                       alt={proj.title} 
-                       className="w-full h-full object-cover scale-[1.15] grayscale group-hover:grayscale-0 transition-all duration-700" 
-                     />
-                  </div>
-                  
-                  <div className="absolute inset-0 bg-black/40 opacity-0 group-hover:opacity-100 transition-opacity duration-500 flex items-center justify-center">
-                    <span className="text-white text-xs uppercase tracking-[0.2em] border border-white/50 px-6 py-3 rounded-full scale-90 group-hover:scale-100 transition-transform duration-500">
-                      View Project
-                    </span>
-                  </div>
-                </div>
-                
-                <div className="flex justify-between items-start mt-2">
-                  <div>
-                    <h3 className="text-lg md:text-xl font-bold uppercase tracking-tight text-black mb-1 group-hover:text-cyan-600 transition-colors">
-                      {proj.title}
-                    </h3>
-                    <span className="text-black/50 uppercase tracking-[0.2em] text-[9px] font-bold">
-                      {proj.category}
-                    </span>
-                  </div>
-                  <div className="text-right">
-                    <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold">
-                      {proj.status}
-                    </span>
-                  </div>
-                </div>
-                
-              </div>
+      {/* Filter bar */}
+      <section
+        className="sticky top-16 md:top-20 z-20 px-6 md:px-12 lg:px-16 py-4 md:py-5 border-y backdrop-blur-md"
+        style={{
+          backgroundColor:
+            "color-mix(in srgb, var(--color-bone) 85%, transparent)",
+          borderColor: "var(--color-ink-12)",
+        }}
+      >
+        <div className="max-w-[1500px] mx-auto flex flex-col md:flex-row md:items-center justify-between gap-4">
+          <div className="flex flex-wrap gap-x-6 gap-y-2">
+            {projectFilters.map((f) => (
+              <button
+                key={f}
+                onClick={() => setActive(f)}
+                className={`caption pb-1 border-b transition-colors ${
+                  active === f
+                    ? "text-[var(--color-ink)] border-[var(--color-ink)]"
+                    : "text-[var(--color-ink-50)] border-transparent hover:text-[var(--color-ink)]"
+                }`}
+              >
+                {f}
+                <span className="ml-2 tabular text-[var(--color-ink-40)]">
+                  {f === "All works"
+                    ? String(projects.length).padStart(2, "0")
+                    : String(
+                        projects.filter((p) => p.category === f).length
+                      ).padStart(2, "0")}
+                </span>
+              </button>
             ))}
           </div>
-        ) : (
-          /* Empty State if a filter has no projects */
-          <div className="w-full flex justify-center items-center h-64 border border-dashed border-black/20">
-             <span className="text-black/40 uppercase tracking-widest text-xs">No projects found in this category.</span>
+
+          <div className="flex items-center gap-4">
+            <span className="caption text-[var(--color-ink-40)]">View</span>
+            {[
+              ["grid", "Grid"],
+              ["index", "Index"],
+            ].map(([k, label]) => (
+              <button
+                key={k}
+                onClick={() => setView(k)}
+                className={`caption pb-1 border-b transition-colors ${
+                  view === k
+                    ? "text-[var(--color-ink)] border-[var(--color-ink)]"
+                    : "text-[var(--color-ink-50)] border-transparent hover:text-[var(--color-ink)]"
+                }`}
+              >
+                {label}
+              </button>
+            ))}
           </div>
-        )}
-
-        <div className="w-full flex justify-center mt-24">
-          <button className="group flex items-center gap-4 text-xs font-bold uppercase tracking-[0.2em] text-black">
-            <span className="border-b border-black pb-1 group-hover:text-cyan-600 group-hover:border-cyan-600 transition-colors">
-              Load More Archives
-            </span>
-            <svg className="w-4 h-4 transform group-hover:translate-y-1 transition-transform group-hover:text-cyan-600" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path strokeLinecap="round" strokeLinejoin="round" strokeWidth={1.5} d="M19 14l-7 7m0 0l-7-7m7 7V3" /></svg>
-          </button>
         </div>
-
       </section>
 
-    </main>
+      {/* Works */}
+      <section className="px-6 md:px-12 lg:px-16 py-16 md:py-24">
+        {view === "grid" ? (
+          <div className="max-w-[1500px] mx-auto grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-x-6 gap-y-16 md:gap-y-20">
+            {displayed.map((p, i) => (
+              <article key={`${p.title}-${p.year}`} className="p-card group">
+                <div className="flex items-baseline justify-between mb-3">
+                  <span className="caption tabular text-[var(--color-ink-40)]">
+                    / {String(i + 1).padStart(3, "0")}
+                  </span>
+                  <span className="caption text-[var(--color-ink-50)]">
+                    {p.category}
+                  </span>
+                </div>
+                <div className="p-img-wrap overflow-hidden w-full h-[360px] md:h-[420px] bg-[var(--color-ink-06)]">
+                  <img loading="lazy" decoding="async"
+                    src={p.img}
+                    alt={p.title}
+                    className="w-full h-full object-cover scale-[1.1] grayscale group-hover:grayscale-0 transition-all duration-[1200ms] ease-out"
+                  />
+                </div>
+                <div className="mt-5 flex items-start justify-between gap-4">
+                  <div>
+                    <h3 className="font-display text-xl md:text-2xl leading-tight text-[var(--color-ink)]">
+                      {p.title}
+                    </h3>
+                    <p className="caption text-[var(--color-ink-50)] mt-2">
+                      {p.location} · {p.state}
+                    </p>
+                    {p.client && (
+                      <p className="caption text-[var(--color-ink-40)] mt-1">
+                        Client · {p.client}
+                      </p>
+                    )}
+                  </div>
+                  <div className="text-right shrink-0">
+                    <span className="caption tabular text-[var(--color-ink-70)] block">
+                      {p.year}
+                    </span>
+                    <span
+                      className={`caption mt-1 block ${
+                        p.status === "Ongoing"
+                          ? "text-[var(--color-marine)]"
+                          : "text-[var(--color-ink-50)]"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </div>
+                </div>
+                {p.metric && (
+                  <div className="mt-4 pt-3 border-t border-[var(--color-ink-12)] flex items-baseline justify-between">
+                    <span className="caption text-[var(--color-ink-50)]">
+                      {p.metricLabel}
+                    </span>
+                    <span className="font-display tabular text-lg text-[var(--color-ink)]">
+                      {p.metric}
+                    </span>
+                  </div>
+                )}
+              </article>
+            ))}
+            {displayed.length === 0 && (
+              <div className="col-span-full text-center py-24 border border-dashed border-[var(--color-ink-20)]">
+                <p className="caption text-[var(--color-ink-50)]">
+                  No works indexed in this category.
+                </p>
+              </div>
+            )}
+          </div>
+        ) : (
+          <div className="max-w-[1500px] mx-auto">
+            {/* Column header — md+ only, mobile shows stacked cards */}
+            <div className="hidden md:grid grid-cols-12 gap-4 caption text-[var(--color-ink-50)] border-b border-[var(--color-ink-20)] pb-3">
+              <span className="col-span-1">№</span>
+              <span className="col-span-4">Project</span>
+              <span className="col-span-3">Location</span>
+              <span className="col-span-2">Scale</span>
+              <span className="col-span-1 text-right">Year</span>
+              <span className="col-span-1 text-right">Status</span>
+            </div>
+            <ul>
+              {displayed.map((p, i) => (
+                <li
+                  key={`${p.title}-${p.year}`}
+                  className="border-b border-[var(--color-ink-12)] py-5 hover:bg-[var(--color-ink-06)] transition-colors"
+                >
+                  {/* Desktop — table row */}
+                  <div className="hidden md:grid grid-cols-12 gap-4 items-baseline">
+                    <span className="col-span-1 caption tabular text-[var(--color-ink-40)]">
+                      {String(i + 1).padStart(3, "0")}
+                    </span>
+                    <span className="col-span-4 font-display text-lg md:text-xl leading-tight">
+                      {p.title}
+                    </span>
+                    <span className="col-span-3 text-sm text-[var(--color-ink-70)]">
+                      {p.location} · {p.state}
+                    </span>
+                    <span className="col-span-2 caption tabular text-[var(--color-ink-70)]">
+                      {p.metric || "—"}
+                    </span>
+                    <span className="col-span-1 text-right caption tabular text-[var(--color-ink-70)]">
+                      {p.year}
+                    </span>
+                    <span
+                      className={`col-span-1 text-right caption ${
+                        p.status === "Ongoing"
+                          ? "text-[var(--color-marine)]"
+                          : "text-[var(--color-ink-50)]"
+                      }`}
+                    >
+                      {p.status}
+                    </span>
+                  </div>
+
+                  {/* Mobile — stacked card */}
+                  <div className="md:hidden flex flex-col gap-2">
+                    <div className="flex items-baseline justify-between gap-3">
+                      <span className="caption tabular text-[var(--color-ink-40)]">
+                        {String(i + 1).padStart(3, "0")}
+                      </span>
+                      <div className="flex items-baseline gap-3">
+                        <span className="caption tabular text-[var(--color-ink-70)]">
+                          {p.year}
+                        </span>
+                        <span
+                          className={`caption ${
+                            p.status === "Ongoing"
+                              ? "text-[var(--color-marine)]"
+                              : "text-[var(--color-ink-50)]"
+                          }`}
+                        >
+                          {p.status}
+                        </span>
+                      </div>
+                    </div>
+                    <h3 className="font-display text-xl leading-tight">
+                      {p.title}
+                    </h3>
+                    <p className="text-sm text-[var(--color-ink-70)]">
+                      {p.location} · {p.state}
+                    </p>
+                    {p.metric && (
+                      <p className="caption tabular text-[var(--color-ink-70)]">
+                        {p.metricLabel || "Scale"} · {p.metric}
+                      </p>
+                    )}
+                  </div>
+                </li>
+              ))}
+            </ul>
+          </div>
+        )}
+      </section>
+      </main>
+    </>
   );
 };
 

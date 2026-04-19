@@ -1,151 +1,369 @@
-import React, { useRef } from 'react';
-import gsap from 'gsap';
-import { useGSAP } from '@gsap/react';
+import { useRef, useState } from "react";
+import gsap from "gsap";
+import { useGSAP } from "@gsap/react";
+import Button from "../../components/ui/Button";
+import SEO from "../../components/common/SEO";
+import { contact, certifications } from "../../data/company";
+import { services } from "../../data/services";
+
+const contactJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "ContactPage",
+  name: "Contact Amma Lines",
+  url: "https://ammalines.com/contact",
+  mainEntity: {
+    "@type": "Organization",
+    name: "Amma Lines Pvt. Ltd.",
+    telephone: "+91-22-4089-0000",
+    email: "mail@meka.com",
+    address: {
+      "@type": "PostalAddress",
+      streetAddress: "20 Madhuli, Dr. A. B. Road, Worli",
+      addressLocality: "Mumbai",
+      postalCode: "400018",
+      addressRegion: "Maharashtra",
+      addressCountry: "IN",
+    },
+    openingHours: "Mo-Fr 09:30-18:30",
+  },
+};
+
+const topics = [
+  "Breakwater",
+  "Jetty",
+  "Dredging",
+  "Piling",
+  "Caisson / Cofferdam",
+  "Technical services",
+  "General enquiry",
+];
 
 const Contact = () => {
-  const pageRef = useRef(null);
+  const ref = useRef(null);
+  const [topic, setTopic] = useState(topics[0]);
 
   useGSAP(() => {
-    const tl = gsap.timeline({ defaults: { ease: 'expo.out' } });
-
-    // 1. Massive Typography Reveal
-    tl.fromTo('.page-title', 
-      { y: '120%', rotate: 2 }, 
-      { y: '0%', rotate: 0, duration: 1.5, stagger: 0.1, delay: 0.2 }
+    const tl = gsap.timeline({ defaults: { ease: "power2.out" } });
+    tl.fromTo(
+      ".c-title-line",
+      { y: "110%" },
+      { y: "0%", duration: 1.2, stagger: 0.08, delay: 0.2 }
     )
-    // 2. Info text fade in
-    .fromTo('.page-fade', 
-      { opacity: 0, y: 20 }, 
-      { opacity: 1, y: 0, duration: 1, stagger: 0.1 }, 
-      '-=1'
-    )
-    // 3. Form Container Shutter Reveal
-    .fromTo('.form-container',
-      { clipPath: 'inset(100% 0% 0% 0%)' },
-      { clipPath: 'inset(0% 0% 0% 0%)', duration: 1.5, ease: 'expo.inOut' },
-      '-=1.2'
-    )
-    // 4. Form Elements Staggered Entry
-    .fromTo('.form-element',
-      { opacity: 0, y: 20 },
-      { opacity: 1, y: 0, duration: 1, stagger: 0.1 },
-      '-=0.8'
-    );
-  }, { scope: pageRef });
+      .fromTo(
+        ".c-fade",
+        { opacity: 0, y: 16 },
+        { opacity: 1, y: 0, duration: 1, stagger: 0.06 },
+        "-=0.8"
+      )
+      .fromTo(
+        ".form-field",
+        { opacity: 0, y: 12 },
+        { opacity: 1, y: 0, duration: 0.8, stagger: 0.06 },
+        "-=0.6"
+      );
+  }, { scope: ref });
 
   return (
-    <main ref={pageRef} className="w-full bg-white text-black min-h-screen flex flex-col pt-32 overflow-hidden">
-      
-      <section className="px-6 md:px-16 lg:px-24 pb-32 flex flex-col lg:flex-row justify-between gap-16 lg:gap-24">
-        
-        {/* ================= LEFT: HEADER & INFO ================= */}
-        <div className="lg:w-1/2 flex flex-col justify-between">
-          <div>
-            <span className="page-fade text-cyan-600 uppercase tracking-[0.3em] text-[10px] font-bold mb-6 block">
-              [ Inquiries ]
+    <>
+      <SEO
+        title="Contact"
+        description="Write to Amma Lines. Head office: 20 Madhuli, Dr. A. B. Road, Worli, Mumbai 400 018. Telephone +91 22 4089 0000. Email mail@meka.com."
+        path="/contact"
+        jsonLd={contactJsonLd}
+        jsonLdId="ld-contact"
+      />
+      <main
+        ref={ref}
+        className="w-full min-h-screen overflow-hidden"
+        style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
+      >
+      {/* Masthead */}
+      <div className="px-6 md:px-12 lg:px-16 pt-32 md:pt-40">
+        <div className="max-w-[1500px] mx-auto">
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink)" }}
+          />
+          <div className="flex items-center justify-between py-3">
+            <span className="caption text-[var(--color-ink)]">
+              V · Correspondence
             </span>
-            
-            {/* Masked Text Reveal */}
-            <div className="overflow-hidden pb-2">
-              <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none origin-bottom-left block">
-                Let's
-              </h1>
-            </div>
-            <div className="overflow-hidden pb-2 mb-12">
-              <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none origin-bottom-left block">
-                <span style={{ WebkitTextStroke: '2px rgba(0,0,0,0.8)', color: 'transparent' }}>
-                  Talk.
-                </span>
-              </h1>
-            </div>
+            <span className="caption text-[var(--color-ink-50)] hidden md:inline">
+              Write to the Practice
+            </span>
+            <span className="caption tabular text-[var(--color-ink-50)]">
+              Mumbai · India
+            </span>
           </div>
-          
-          {/* Contact Details */}
-          <div className="page-fade flex flex-col sm:flex-row gap-12 mt-12 border-t border-black/10 pt-12">
+          <div
+            className="h-[1px] w-full"
+            style={{ backgroundColor: "var(--color-ink-12)" }}
+          />
+        </div>
+      </div>
+
+      {/* Lede */}
+      <section className="px-6 md:px-12 lg:px-16 pt-12 md:pt-20 pb-20 md:pb-28">
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
+          <div className="col-span-12 md:col-span-3">
+            <p className="c-fade caption text-[var(--color-ink-50)]">
+              The letter desk
+            </p>
+          </div>
+          <div className="col-span-12 md:col-span-9">
+            <h1 className="font-display text-6xl md:text-8xl lg:text-[8.5rem] leading-[0.95] tracking-[-0.02em]">
+              <span className="reveal-line">
+                <span className="c-title-line block">Write to us.</span>
+              </span>
+              <span className="reveal-line">
+                <span className="c-title-line block italic text-[var(--color-ink-70)]">
+                  We answer every letter.
+                </span>
+              </span>
+            </h1>
+
+            <p className="c-fade mt-12 max-w-2xl text-lg leading-relaxed text-[var(--color-ink-70)]">
+              For project enquiries, technical collaboration or press — our
+              engineering team reads incoming mail within a working day.
+            </p>
+          </div>
+        </div>
+      </section>
+
+      {/* Detail grid */}
+      <section className="border-y" style={{ borderColor: "var(--color-ink-12)" }}>
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12">
+          {/* Details */}
+          <aside
+            className="col-span-12 lg:col-span-5 p-8 md:p-12 lg:p-16 border-b lg:border-b-0 lg:border-r flex flex-col gap-12"
+            style={{ borderColor: "var(--color-ink-12)" }}
+          >
             <div>
-              <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-3 block">Headquarters</span>
-              <p className="text-sm text-black/60 leading-relaxed font-light">
-                Meka Tower, Suite 400<br/>
-                Marine Drive, Mumbai<br/>
-                Maharashtra 400001, India
+              <p className="caption text-[var(--color-ink-50)] mb-4">
+                Head office
+              </p>
+              <p className="font-display text-2xl leading-snug">
+                {contact.address.line1}
+                <br />
+                {contact.address.line2}
+                <br />
+                {contact.address.city} {contact.address.pin} ·{" "}
+                {contact.address.country}
               </p>
             </div>
-            <div>
-              <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-3 block">Direct Line</span>
-              <p className="text-sm text-black/60 leading-relaxed font-light mb-4">
-                +91 (022) 2285 3784<br/>
-                +91 (022) 2285 3785
+
+            <div className="grid grid-cols-2 gap-6">
+              <div>
+                <p className="caption text-[var(--color-ink-50)] mb-3">
+                  Telephone
+                </p>
+                <a
+                  href={`tel:${contact.phoneTel}`}
+                  className="text-[15px] leading-relaxed text-[var(--color-ink-80)] hover:text-[var(--color-marine)] transition-colors tabular"
+                >
+                  {contact.phoneDisplay}
+                </a>
+              </div>
+              <div>
+                <p className="caption text-[var(--color-ink-50)] mb-3">Email</p>
+                <a
+                  href={`mailto:${contact.emailGeneral}`}
+                  className="text-[15px] text-[var(--color-ink)] border-b border-[var(--color-ink-20)] hover:border-[var(--color-marine)] hover:text-[var(--color-marine)] transition-colors"
+                >
+                  {contact.emailGeneral}
+                </a>
+              </div>
+            </div>
+
+            <div className="border-t border-[var(--color-ink-12)] pt-8">
+              <p className="caption text-[var(--color-ink-50)] mb-3">Hours</p>
+              <p className="text-[15px] leading-relaxed text-[var(--color-ink-70)]">
+                {contact.hours}
               </p>
-              <a href="mailto:info@ammalines.com" className="text-sm text-black hover:text-cyan-600 transition-colors font-bold border-b border-black/20 hover:border-cyan-600 pb-1">
-                info@ammalines.com
+            </div>
+
+            <div className="border-t border-[var(--color-ink-12)] pt-8">
+              <p className="caption text-[var(--color-ink-50)] mb-3">
+                Accreditation
+              </p>
+              <ul className="flex flex-col gap-1 text-[15px] leading-relaxed text-[var(--color-ink-70)]">
+                {certifications.map((c) => (
+                  <li key={c.k} className="flex items-baseline gap-3">
+                    <span className="caption tabular text-[var(--color-ink-40)]">
+                      {c.k}
+                    </span>
+                    <span>{c.v}</span>
+                  </li>
+                ))}
+              </ul>
+            </div>
+
+            <div className="border-t border-[var(--color-ink-12)] pt-8">
+              <p className="caption text-[var(--color-ink-50)] mb-3">
+                Careers
+              </p>
+              <a
+                href={`mailto:${contact.emailCareers}`}
+                className="text-[15px] text-[var(--color-ink)] border-b border-[var(--color-ink-20)] hover:border-[var(--color-marine)] hover:text-[var(--color-marine)] transition-colors"
+              >
+                {contact.emailCareers}
               </a>
             </div>
+          </aside>
+
+          {/* Form */}
+          <div className="col-span-12 lg:col-span-7 p-8 md:p-12 lg:p-16">
+            <div className="flex items-end justify-between mb-10">
+              <div>
+                <p className="caption text-[var(--color-ink-50)] mb-2">
+                  Project enquiry
+                </p>
+                <h2 className="font-display text-3xl md:text-4xl leading-tight">
+                  Tell us about the work.
+                </h2>
+              </div>
+              <p className="caption tabular text-[var(--color-ink-40)]">
+                {services.length} disciplines
+              </p>
+            </div>
+
+            <form
+              className="flex flex-col gap-10"
+              onSubmit={(e) => e.preventDefault()}
+            >
+              <div className="form-field grid grid-cols-12 gap-4 border-b border-[var(--color-ink-12)] pb-4">
+                <label
+                  htmlFor="first-name"
+                  className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)] pt-3"
+                >
+                  First name
+                </label>
+                <input
+                  id="first-name"
+                  type="text"
+                  autoComplete="given-name"
+                  placeholder="Aditi"
+                  className="col-span-12 md:col-span-9 bg-transparent border-none outline-none text-lg text-[var(--color-ink)] placeholder:text-[var(--color-ink-40)] py-2"
+                />
+              </div>
+
+              <div className="form-field grid grid-cols-12 gap-4 border-b border-[var(--color-ink-12)] pb-4">
+                <label
+                  htmlFor="last-name"
+                  className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)] pt-3"
+                >
+                  Last name
+                </label>
+                <input
+                  id="last-name"
+                  type="text"
+                  autoComplete="family-name"
+                  placeholder="Rao"
+                  className="col-span-12 md:col-span-9 bg-transparent border-none outline-none text-lg text-[var(--color-ink)] placeholder:text-[var(--color-ink-40)] py-2"
+                />
+              </div>
+
+              <div className="form-field grid grid-cols-12 gap-4 border-b border-[var(--color-ink-12)] pb-4">
+                <label
+                  htmlFor="organisation"
+                  className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)] pt-3"
+                >
+                  Organisation
+                </label>
+                <input
+                  id="organisation"
+                  type="text"
+                  autoComplete="organization"
+                  placeholder="Port authority, EPC contractor, owner"
+                  className="col-span-12 md:col-span-9 bg-transparent border-none outline-none text-lg text-[var(--color-ink)] placeholder:text-[var(--color-ink-40)] py-2"
+                />
+              </div>
+
+              <div className="form-field grid grid-cols-12 gap-4 border-b border-[var(--color-ink-12)] pb-4">
+                <label
+                  htmlFor="email"
+                  className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)] pt-3"
+                >
+                  Email
+                </label>
+                <input
+                  id="email"
+                  type="email"
+                  autoComplete="email"
+                  placeholder="a.rao@example.com"
+                  className="col-span-12 md:col-span-9 bg-transparent border-none outline-none text-lg text-[var(--color-ink)] placeholder:text-[var(--color-ink-40)] py-2"
+                />
+              </div>
+
+              <div className="form-field grid grid-cols-12 gap-4 border-b border-[var(--color-ink-12)] pb-4">
+                <label
+                  htmlFor="phone"
+                  className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)] pt-3"
+                >
+                  Phone
+                </label>
+                <input
+                  id="phone"
+                  type="tel"
+                  autoComplete="tel"
+                  placeholder="+91 …"
+                  className="col-span-12 md:col-span-9 bg-transparent border-none outline-none text-lg text-[var(--color-ink)] placeholder:text-[var(--color-ink-40)] py-2 tabular"
+                />
+              </div>
+
+              <div className="form-field grid grid-cols-12 gap-4 border-b border-[var(--color-ink-12)] pb-4">
+                <span className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)] pt-1">
+                  Discipline
+                </span>
+                <div className="col-span-12 md:col-span-9 flex flex-wrap gap-x-4 gap-y-2">
+                  {topics.map((t) => (
+                    <button
+                      key={t}
+                      type="button"
+                      onClick={() => setTopic(t)}
+                      className={`caption pb-1 border-b transition-colors ${
+                        topic === t
+                          ? "text-[var(--color-marine)] border-[var(--color-marine)]"
+                          : "text-[var(--color-ink-50)] border-transparent hover:text-[var(--color-ink)]"
+                      }`}
+                    >
+                      {t}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="form-field grid grid-cols-12 gap-4 border-b border-[var(--color-ink-12)] pb-4">
+                <label
+                  htmlFor="msg"
+                  className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)] pt-3"
+                >
+                  Brief
+                </label>
+                <textarea
+                  id="msg"
+                  rows={5}
+                  placeholder="Site, scope, approximate programme."
+                  className="col-span-12 md:col-span-9 bg-transparent border-none outline-none text-lg text-[var(--color-ink)] placeholder:text-[var(--color-ink-40)] py-2 resize-none"
+                />
+              </div>
+
+              <div className="form-field flex flex-col sm:flex-row sm:items-center sm:justify-between pt-4 gap-5">
+                <p className="caption text-[var(--color-ink-50)] max-w-xs">
+                  We reply within one working day.
+                </p>
+                <div className="self-start sm:self-auto">
+                  <Button type="submit" variant="primary">
+                    Send enquiry
+                  </Button>
+                </div>
+              </div>
+            </form>
           </div>
         </div>
-
-        {/* ================= RIGHT: ARCHITECTURAL FORM ================= */}
-        <div className="form-container lg:w-1/2 bg-gray-50 p-8 md:p-16 border border-black/10 flex flex-col justify-center">
-           
-           <div className="form-element mb-12">
-             <h3 className="text-2xl font-light tracking-tight mb-2">Project Initiation</h3>
-             <p className="text-xs text-black/50 tracking-wide font-light">Fill out the form below and our engineering team will reach out within 24 hours.</p>
-           </div>
-
-           <form className="flex flex-col gap-10">
-             
-             <div className="form-element relative group">
-               <input 
-                 type="text" 
-                 id="name"
-                 placeholder=" " 
-                 className="peer w-full bg-transparent border-b border-black/20 pb-3 text-sm focus:outline-none focus:border-cyan-600 text-black transition-colors" 
-               />
-               <label htmlFor="name" className="absolute left-0 top-0 text-xs tracking-widest uppercase text-black/40 transition-all peer-focus:-top-5 peer-focus:text-[9px] peer-focus:text-cyan-600 peer-focus:font-bold peer-placeholder-shown:top-0 peer-placeholder-shown:text-xs">
-                 Your Name
-               </label>
-             </div>
-
-             <div className="form-element relative group">
-               <input 
-                 type="email" 
-                 id="email"
-                 placeholder=" " 
-                 className="peer w-full bg-transparent border-b border-black/20 pb-3 text-sm focus:outline-none focus:border-cyan-600 text-black transition-colors" 
-               />
-               <label htmlFor="email" className="absolute left-0 top-0 text-xs tracking-widest uppercase text-black/40 transition-all peer-focus:-top-5 peer-focus:text-[9px] peer-focus:text-cyan-600 peer-focus:font-bold peer-placeholder-shown:top-0 peer-placeholder-shown:text-xs">
-                 Your Email
-               </label>
-             </div>
-
-             <div className="form-element relative group mt-4">
-               <textarea 
-                 id="details"
-                 placeholder=" " 
-                 rows="4" 
-                 className="peer w-full bg-transparent border-b border-black/20 pb-3 text-sm focus:outline-none focus:border-cyan-600 text-black transition-colors resize-none"
-               ></textarea>
-               <label htmlFor="details" className="absolute left-0 top-0 text-xs tracking-widest uppercase text-black/40 transition-all peer-focus:-top-5 peer-focus:text-[9px] peer-focus:text-cyan-600 peer-focus:font-bold peer-placeholder-shown:top-0 peer-placeholder-shown:text-xs">
-                 Project Details
-               </label>
-             </div>
-
-             <div className="form-element mt-4">
-               <button 
-                 type="button" 
-                 className="group relative overflow-hidden border border-black/20 px-10 py-5 text-xs tracking-[0.2em] uppercase transition-all duration-500 hover:border-cyan-600"
-               >
-                 <span className="relative z-10 text-black group-hover:text-white transition-colors duration-500 font-bold">
-                   Submit Inquiry
-                 </span>
-                 <div className="absolute inset-0 h-full w-full scale-x-0 origin-left bg-cyan-600 transition-transform duration-500 group-hover:scale-x-100 ease-out" />
-               </button>
-             </div>
-
-           </form>
-        </div>
-
       </section>
-    </main>
+      </main>
+    </>
   );
 };
 

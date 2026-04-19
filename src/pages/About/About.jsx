@@ -1,170 +1,381 @@
-import React, { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import { useRef } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import Button from "../../components/ui/Button";
+import SEO from "../../components/common/SEO";
+import {
+  company,
+  timeline,
+  values,
+  leadership,
+  awards,
+} from "../../data/company";
 
 gsap.registerPlugin(ScrollTrigger);
 
+const aboutJsonLd = {
+  "@context": "https://schema.org",
+  "@type": "AboutPage",
+  name: "About Amma Lines",
+  url: "https://ammalines.com/about",
+  mainEntity: {
+    "@type": "Organization",
+    name: "Amma Lines Pvt. Ltd.",
+    foundingDate: "1978-12-13",
+    founder: { "@type": "Person", name: "Dr. Meka Papa Rao" },
+    parentOrganization: { "@type": "Organization", name: "Meka Group" },
+    identifier: {
+      "@type": "PropertyValue",
+      propertyID: "CIN",
+      value: "U74999TN1978PTC007674",
+    },
+  },
+};
+
+const PageMasthead = ({ chapter, title, page }) => (
+  <div className="px-6 md:px-12 lg:px-16 pt-32 md:pt-40">
+    <div className="max-w-[1500px] mx-auto">
+      <div
+        className="h-[1px] w-full"
+        style={{ backgroundColor: "var(--color-ink)" }}
+      />
+      <div className="flex items-center justify-between py-3">
+        <span className="caption text-[var(--color-ink)]">{chapter}</span>
+        <span className="caption text-[var(--color-ink-50)] hidden md:inline">
+          {title}
+        </span>
+        <span className="caption tabular text-[var(--color-ink-50)]">{page}</span>
+      </div>
+      <div
+        className="h-[1px] w-full"
+        style={{ backgroundColor: "var(--color-ink-12)" }}
+      />
+    </div>
+  </div>
+);
+
 const About = () => {
-  const pageRef = useRef(null);
+  const ref = useRef(null);
 
   useGSAP(() => {
-    gsap.from('.page-title', { y: 100, opacity: 0, duration: 1.2, stagger: 0.1, ease: 'power4.out', delay: 0.2 });
-    gsap.from('.page-fade', { opacity: 0, y: 20, duration: 1, ease: 'power2.out', delay: 0.5 });
-    gsap.from('.timeline-item', { scrollTrigger: { trigger: '.timeline-section', start: 'top 75%' }, y: 50, opacity: 0, duration: 0.8, stagger: 0.2, ease: 'power3.out' });
-    gsap.from('.team-card', { scrollTrigger: { trigger: '.team-section', start: 'top 75%' }, y: 40, opacity: 0, duration: 0.8, stagger: 0.15, ease: 'power2.out' });
-  }, { scope: pageRef });
+    gsap.fromTo(
+      ".a-line",
+      { y: "110%" },
+      { y: "0%", duration: 1.2, stagger: 0.07, ease: "power2.out", delay: 0.2 }
+    );
+    gsap.from(".a-fade", {
+      opacity: 0,
+      y: 16,
+      duration: 1,
+      stagger: 0.07,
+      delay: 0.5,
+      ease: "power3.out",
+    });
+    gsap.from(".tl-row", {
+      scrollTrigger: { trigger: ".tl-section", start: "top 78%" },
+      y: 24,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.06,
+      ease: "power3.out",
+    });
+    gsap.from(".val-card", {
+      scrollTrigger: { trigger: ".val-section", start: "top 78%" },
+      y: 24,
+      opacity: 0,
+      duration: 0.8,
+      stagger: 0.06,
+      ease: "power3.out",
+    });
+    gsap.from(".tm-card", {
+      scrollTrigger: { trigger: ".tm-section", start: "top 78%" },
+      y: 30,
+      opacity: 0,
+      duration: 0.9,
+      stagger: 0.1,
+      ease: "power3.out",
+    });
+    gsap.from(".aw-row", {
+      scrollTrigger: { trigger: ".aw-section", start: "top 80%" },
+      y: 18,
+      opacity: 0,
+      duration: 0.75,
+      stagger: 0.06,
+      ease: "power3.out",
+    });
+  }, { scope: ref });
 
   return (
-    <main ref={pageRef} className="w-full bg-white text-black min-h-screen flex flex-col pt-32 pb-32 overflow-hidden">
-      
-      <section className="px-6 md:px-16 lg:px-24 pb-24 border-b border-black/10">
-        <span className="page-fade text-cyan-600 uppercase tracking-[0.3em] text-[10px] font-bold mb-6 block">Our History</span>
-        <div className="overflow-hidden pb-2">
-          <h1 className="page-title text-6xl md:text-8xl lg:text-9xl font-black uppercase tracking-tighter leading-none">
-            The Flagship <br/>
-            <span style={{ WebkitTextStroke: '2px rgba(0,0,0,0.8)', color: 'transparent' }}>Legacy.</span>
-          </h1>
-        </div>
-        <div className="page-fade flex flex-col md:flex-row gap-12 mt-12 items-start md:items-end justify-between">
-          <p className="max-w-2xl text-black/60 text-lg font-light leading-relaxed">
-            Incorporated on December 13, 1978, Amma Lines has grown from a pioneering marine construction company into the cornerstone of the Meka Group, shaping India's ports and jetties with uncompromising safety and sustainability.
-          </p>
-          <div className="text-right">
-            <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold block mb-2">Company Status</span>
-            <span className="text-xl font-bold uppercase tracking-widest text-black">Active</span>
+    <>
+      <SEO
+        title="The Practice"
+        description={`Amma Lines Pvt. Ltd. — incorporated 13 December 1978 by ${company.founder} in Mumbai. Flagship of the Meka Group, ISO-certified, ETInfra 2024 award winner. CIN ${company.cin}.`}
+        path="/about"
+        jsonLd={aboutJsonLd}
+        jsonLdId="ld-about"
+      />
+      <main
+        ref={ref}
+        className="w-full min-h-screen overflow-hidden"
+        style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
+      >
+      <PageMasthead
+        chapter="II · Practice"
+        title="Flagship of the Meka Group"
+        page={`CIN · ${company.cin}`}
+      />
+
+      {/* Lede */}
+      <section className="px-6 md:px-12 lg:px-16 pt-12 md:pt-20 pb-24 md:pb-32">
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
+          <div className="col-span-12 md:col-span-3">
+            <p className="a-fade caption text-[var(--color-ink-50)]">
+              On the firm
+            </p>
+          </div>
+          <div className="col-span-12 md:col-span-9">
+            <h1 className="font-display text-6xl md:text-8xl lg:text-[8.5rem] leading-[0.95] tracking-[-0.02em]">
+              <span className="reveal-line">
+                <span className="a-line block">A marine practice</span>
+              </span>
+              <span className="reveal-line">
+                <span className="a-line block italic text-[var(--color-ink-70)]">
+                  incorporated in 1978.
+                </span>
+              </span>
+            </h1>
+
+            <div className="a-fade mt-14 grid grid-cols-12 gap-6">
+              <p className="col-span-12 md:col-span-8 dropcap text-[17px] md:text-[19px] leading-[1.7] text-[var(--color-ink-80)] max-w-[58ch]">
+                Amma Lines Pvt. Ltd. was incorporated on 13 December 1978 by{" "}
+                {company.founder} in Mumbai. From a pioneering marine
+                construction firm, it has grown into the flagship of the
+                Meka Group — delivering world-class marine infrastructure,
+                coastal protection and port development across India and
+                international waters.
+              </p>
+              <div className="col-span-6 md:col-span-2">
+                <p className="caption text-[var(--color-ink-50)] mb-2">
+                  Founded
+                </p>
+                <p className="font-display tabular text-3xl md:text-4xl">
+                  1978
+                </p>
+              </div>
+              <div className="col-span-6 md:col-span-2">
+                <p className="caption text-[var(--color-ink-50)] mb-2">
+                  Legacy
+                </p>
+                <p className="font-display text-3xl md:text-4xl">40+ yrs</p>
+              </div>
+            </div>
           </div>
         </div>
       </section>
 
-      <section className="px-6 md:px-16 lg:px-24 py-24 md:py-32 border-b border-black/10">
-        <div className="max-w-7xl mx-auto grid grid-cols-1 lg:grid-cols-2 gap-16 lg:gap-24">
-          <div>
-            <span className="text-cyan-600 uppercase tracking-[0.2em] text-[10px] font-bold mb-6 block">Vision & Mission</span>
-            <h2 className="text-4xl md:text-5xl font-light leading-tight mb-8">
-              Building the <span className="font-bold text-black">Future of Marine</span> & Coastal Infrastructure.
-            </h2>
-            <p className="text-black/60 font-light leading-relaxed mb-12">
-              At Amma Lines, our vision is to redefine marine and port infrastructure with innovation, reliability, and sustainability. We are committed to delivering world-class engineering solutions that protect coastlines, empower industries, and connect communities.
+      {/* Values */}
+      <section
+        className="val-section px-6 md:px-12 lg:px-16 py-24 md:py-32 border-y"
+        style={{
+          backgroundColor: "var(--color-paper)",
+          borderColor: "var(--color-ink-12)",
+        }}
+      >
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-10">
+          <div className="col-span-12 md:col-span-4">
+            <p className="caption text-[var(--color-ink-50)] mb-6">
+              III · Values
             </p>
-            <div className="flex gap-12 border-t border-black/10 pt-8">
-              <div>
-                <span className="text-4xl font-black block mb-2">81%</span>
-                <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold">Client Trust</span>
-              </div>
-              <div>
-                <span className="text-4xl font-black block mb-2">60%</span>
-                <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold">Engineering Excellence</span>
-              </div>
+            <h2 className="font-display text-4xl md:text-5xl lg:text-6xl leading-[1.05]">
+              Four principles<br />
+              <em className="italic text-[var(--color-ink-70)]">we return to.</em>
+            </h2>
+            <p className="mt-6 text-[15px] text-[var(--color-ink-70)] leading-relaxed max-w-md">
+              Not values on a wall — these are decisions we make every day,
+              at the site and in the office.
+            </p>
+          </div>
+
+          <ul className="col-span-12 md:col-span-8 grid grid-cols-1 sm:grid-cols-2 gap-x-10 gap-y-12">
+            {values.map((v) => (
+              <li
+                key={v.n}
+                className="val-card border-t border-[var(--color-ink-20)] pt-6"
+              >
+                <p className="caption tabular text-[var(--color-ink-40)] mb-4">
+                  / {v.n}
+                </p>
+                <h3 className="font-display text-2xl md:text-3xl leading-tight mb-4">
+                  {v.title}
+                </h3>
+                <p className="text-[14px] leading-[1.7] text-[var(--color-ink-70)]">
+                  {v.body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Timeline */}
+      <section className="tl-section px-6 md:px-12 lg:px-16 py-24 md:py-32">
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
+          <div className="col-span-12 md:col-span-3">
+            <p className="caption text-[var(--color-ink-50)] mb-6">
+              IV · Chronology
+            </p>
+            <h2 className="font-display text-4xl md:text-5xl leading-[1.05]">
+              From 1978 to<br />
+              <em className="italic text-[var(--color-ink-70)]">today.</em>
+            </h2>
+          </div>
+
+          <ul className="col-span-12 md:col-span-9 flex flex-col">
+            {timeline.map((t, i) => (
+              <li
+                key={t.year}
+                className={`tl-row grid grid-cols-12 gap-4 md:gap-8 py-8 md:py-10 border-t border-[var(--color-ink-12)] ${
+                  i === timeline.length - 1 ? "border-b" : ""
+                }`}
+              >
+                <span className="col-span-4 md:col-span-2 font-display tabular text-3xl md:text-5xl leading-none">
+                  {t.year}
+                </span>
+                <div className="col-span-8 md:col-span-4">
+                  <h3 className="caption text-[var(--color-ink)]">
+                    {t.title}
+                  </h3>
+                </div>
+                <p className="col-span-12 md:col-span-6 text-[15px] md:text-[16px] leading-relaxed text-[var(--color-ink-70)] max-w-[52ch]">
+                  {t.body}
+                </p>
+              </li>
+            ))}
+          </ul>
+        </div>
+      </section>
+
+      {/* Recognition */}
+      <section
+        className="aw-section px-6 md:px-12 lg:px-16 py-24 md:py-32 border-t"
+        style={{ borderColor: "var(--color-ink-12)" }}
+      >
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
+          <div className="col-span-12 md:col-span-3">
+            <p className="caption text-[var(--color-ink-50)] mb-6">
+              V · Recognition
+            </p>
+          </div>
+          <div className="col-span-12 md:col-span-9">
+            <h2 className="font-display text-4xl md:text-6xl leading-[1.05] max-w-3xl">
+              Selected awards &amp;<br />
+              <em className="italic text-[var(--color-ink-70)]">milestones.</em>
+            </h2>
+            <ul className="mt-12 flex flex-col border-t border-[var(--color-ink-20)]">
+              {awards.map((a) => (
+                <li
+                  key={`${a.year}-${a.title}`}
+                  className="aw-row grid grid-cols-12 gap-4 md:gap-8 py-6 md:py-8 border-b border-[var(--color-ink-12)]"
+                >
+                  <span className="col-span-3 md:col-span-2 caption tabular text-[var(--color-ink-70)]">
+                    {a.year}
+                  </span>
+                  <h3 className="col-span-9 md:col-span-6 font-display text-xl md:text-2xl leading-tight">
+                    {a.title}
+                  </h3>
+                  <p className="col-span-12 md:col-span-4 caption text-[var(--color-ink-50)] md:text-right">
+                    {a.body}
+                  </p>
+                </li>
+              ))}
+            </ul>
+          </div>
+        </div>
+      </section>
+
+      {/* Leadership */}
+      <section
+        className="tm-section px-6 md:px-12 lg:px-16 py-24 md:py-32 border-t"
+        style={{ borderColor: "var(--color-ink-12)" }}
+      >
+        <div className="max-w-[1500px] mx-auto">
+          <div className="grid grid-cols-12 gap-4 md:gap-6 mb-16">
+            <div className="col-span-12 md:col-span-3">
+              <p className="caption text-[var(--color-ink-50)]">
+                VI · Leadership
+              </p>
+            </div>
+            <div className="col-span-12 md:col-span-9">
+              <h2 className="font-display text-4xl md:text-6xl lg:text-7xl leading-[1.05] max-w-3xl">
+                The people<br />
+                <em className="italic text-[var(--color-ink-70)]">
+                  who stand site.
+                </em>
+              </h2>
             </div>
           </div>
 
-          <div className="grid grid-cols-1 sm:grid-cols-2 gap-8">
-            {[
-              { title: 'Quality Construction', desc: 'Ensuring every project meets the highest global standards in safety, durability, and performance.' },
-              { title: 'Mutual Partnership', desc: 'Long-term collaborations with clients and stakeholders built on absolute trust and transparency.' },
-              { title: 'Proactive Safety', desc: 'ISO-certified QHSE system guaranteeing safe and sustainable operations across all environments.' },
-              { title: 'Encourage Teamwork', desc: 'Fostering innovation and excellence through skilled teams, modern tech, and hands-on leadership.' }
-            ].map((value, i) => (
-              <div key={i} className="bg-black/5 border border-black/10 p-8 flex flex-col justify-between hover:bg-black/10 transition-colors">
-                <span className="text-cyan-600 font-mono text-sm mb-4 block">0{i + 1}</span>
-                <h3 className="font-bold uppercase tracking-widest text-sm mb-4">{value.title}</h3>
-                <p className="text-xs text-black/60 leading-relaxed font-light">{value.desc}</p>
-              </div>
+          <div className="grid grid-cols-1 md:grid-cols-3 gap-8 md:gap-12">
+            {leadership.map((t, i) => (
+              <article key={t.name} className="tm-card group">
+                <div className="flex items-center justify-between mb-3">
+                  <span className="caption tabular text-[var(--color-ink-40)]">
+                    / 0{i + 1}
+                  </span>
+                  <span className="caption text-[var(--color-ink-50)]">
+                    {t.role}
+                  </span>
+                </div>
+                <div className="overflow-hidden h-[440px] md:h-[540px] mb-5 bg-[var(--color-ink-08)]">
+                  <img loading="lazy" decoding="async"
+                    src={t.img}
+                    alt={t.name}
+                    className="hover-colorize w-full h-full object-cover duotone group-hover:scale-[1.03]"
+                  />
+                </div>
+                <h3 className="font-display text-2xl md:text-3xl mb-3">
+                  {t.name}
+                </h3>
+                <p className="text-[14px] leading-[1.7] text-[var(--color-ink-70)] max-w-sm">
+                  {t.bio}
+                </p>
+              </article>
             ))}
           </div>
         </div>
       </section>
 
-      <section className="timeline-section px-6 md:px-16 lg:px-24 py-24 md:py-32 border-b border-black/10 bg-gray-50">
-        <div className="max-w-5xl mx-auto">
-          <span className="text-cyan-600 uppercase tracking-[0.2em] text-[10px] font-bold mb-16 block text-center">Company Timeline</span>
-          
-          <div className="relative border-l border-black/20 ml-4 md:ml-1/2 flex flex-col gap-16 pb-8">
-            
-            <div className="timeline-item relative pl-12 md:pl-24">
-              <div className="absolute top-0 -left-[5px] w-[9px] h-[9px] bg-cyan-600 rounded-full shadow-[0_0_15px_rgba(0,180,216,0.5)]"></div>
-              <span className="text-5xl md:text-7xl font-black text-gray-200 block mb-4 leading-none">1978</span>
-              <h3 className="text-xl font-bold uppercase tracking-widest text-black mb-4">Foundation of Meka Group</h3>
-              <p className="text-sm text-black/60 leading-relaxed max-w-lg">
-                The journey begins with the vision of Dr. Meka Papa Rao, establishing a strong foundation in marine infrastructure and uncompromising engineering excellence.
-              </p>
-            </div>
-
-            <div className="timeline-item relative pl-12 md:pl-24">
-              <div className="absolute top-0 -left-[5px] w-[9px] h-[9px] bg-cyan-600 rounded-full"></div>
-              <span className="text-5xl md:text-7xl font-black text-gray-200 block mb-4 leading-none">1988</span>
-              <h3 className="text-xl font-bold uppercase tracking-widest text-black mb-4">Early Breakthrough Projects</h3>
-              <p className="text-sm text-black/60 leading-relaxed max-w-lg">
-                Completed landmark works like the Floating Breakwater at JNPT, Navi Mumbai, officially marking our entry into massive, large-scale marine construction.
-              </p>
-            </div>
-
-            <div className="timeline-item relative pl-12 md:pl-24">
-              <div className="absolute top-0 -left-[5px] w-[9px] h-[9px] bg-cyan-600 rounded-full"></div>
-              <span className="text-5xl md:text-7xl font-black text-gray-200 block mb-4 leading-none">2009</span>
-              <h3 className="text-xl font-bold uppercase tracking-widest text-black mb-4">Port & Dredging Expansion</h3>
-              <p className="text-sm text-black/60 leading-relaxed max-w-lg">
-                Successfully executed complex breakwaters and dredging at Karaikal Port, cementing Amma Lines' position as elite specialists in marine works.
-              </p>
-            </div>
-
-          </div>
-        </div>
-      </section>
-
-      <section className="team-section px-6 md:px-16 lg:px-24 py-24 md:py-32">
-        <div className="max-w-7xl mx-auto">
-          <div className="flex flex-col md:flex-row justify-between items-end mb-16 gap-8">
-            <div>
-              <span className="text-cyan-600 uppercase tracking-[0.2em] text-[10px] font-bold mb-4 block">Our Crew</span>
-              <h2 className="text-4xl md:text-6xl font-black uppercase tracking-tighter text-black">The Leadership</h2>
-            </div>
-            <p className="max-w-sm text-xs text-black/60 leading-relaxed">
-              Driving marine infrastructure forward with innovation, hands-on experience, and decades of specialized knowledge.
+      {/* CTA */}
+      <section
+        className="px-6 md:px-12 lg:px-16 py-24 md:py-32 border-t"
+        style={{
+          backgroundColor: "var(--color-ink)",
+          color: "var(--color-bone)",
+          borderColor: "var(--color-ink-12)",
+        }}
+      >
+        <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-6 items-end">
+          <div className="col-span-12 md:col-span-9">
+            <p className="caption text-[var(--color-bone-50)] mb-6">
+              Work with us
             </p>
+            <h2 className="font-display text-4xl md:text-6xl lg:text-7xl leading-[1.05]">
+              Write to the practice.<br />
+              <em className="italic text-[var(--color-bone-70)]">
+                We read every letter.
+              </em>
+            </h2>
           </div>
-
-          <div className="grid grid-cols-1 md:grid-cols-3 gap-8">
-            <div className="team-card group cursor-pointer">
-              <div className="h-[400px] bg-black/5 mb-6 overflow-hidden relative border border-black/10">
-                <img src="/about/hmr.webp" alt="Mr. Hemanth Meka Rao" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
-                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div> */}
-              </div>
-              <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-2 block">Director</span>
-              <h3 className="text-xl font-bold uppercase tracking-tight text-black mb-3">Mr. Hemanth Meka Rao</h3>
-              <p className="text-xs text-black/60 leading-relaxed pr-4">
-                Mechanical Engineer from Georgia Tech, USA. Elevates the company legacy through innovative approaches and focus on cost-effective marine solutions.
-              </p>
-            </div>
-
-            <div className="team-card group cursor-pointer">
-              <div className="h-[400px] bg-black/5 mb-6 overflow-hidden relative border border-black/10">
-                <img src="/about/basusir.webp" alt="Mr. Arindam Basu" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
-                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div> */}
-              </div>
-              <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-2 block">Vice President</span>
-              <h3 className="text-xl font-bold uppercase tracking-tight text-black mb-3">Mr. Arindam Basu</h3>
-              <p className="text-xs text-black/60 leading-relaxed pr-4">
-                Engineering Manager with over 35 years of expertise in HDPE pipeline installation, heavy marine infrastructure, and EPC project execution.
-              </p>
-            </div>
-
-            <div className="team-card group cursor-pointer">
-              <div className="h-[400px] bg-black/5 mb-6 overflow-hidden relative border border-black/10">
-                <img src="/about/rayudusir.webp" alt="Capt. M. K. Rayudu" className="w-full h-full object-cover grayscale group-hover:grayscale-0 group-hover:scale-105 transition-all duration-700 mix-blend-luminosity" />
-                {/* <div className="absolute inset-0 bg-gradient-to-t from-white/90 to-transparent"></div> */}
-              </div>
-              <span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-2 block">Dredging Head</span>
-              <h3 className="text-xl font-bold uppercase tracking-tight text-black mb-3">Capt. M. K. Rayudu</h3>
-              <p className="text-xs text-black/60 leading-relaxed pr-4">
-                Head of Dredging at MEKA Group, bringing over 40 years of highly specialized experience in large-scale dredging operations and marine infrastructure.
-              </p>
-            </div>
+          <div className="col-span-12 md:col-span-3 flex md:justify-end">
+            <Button to="/contact" variant="primary-light">
+              Begin a project
+            </Button>
           </div>
         </div>
       </section>
-    </main>
+      </main>
+    </>
   );
 };
 

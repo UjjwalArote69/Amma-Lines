@@ -1,0 +1,75 @@
+{
+  "nav": {
+    "home": "Home",
+    "about": "About",
+    "projects": "Projects",
+    "services": "Services",
+    "careers": "Careers",
+    "contact": "Contact",
+    "menu": "Menu",
+    "close": "Close",
+    "index": "Index",
+    "servicesPanel": {
+      "kicker": "Services · 12",
+      "title": "Twelve disciplines,",
+      "titleItalic": "one practice.",
+      "viewAll": "View all services"
+    }
+  },
+  "footer": {
+    "correspondence": "Correspondence",
+    "imprint": "Imprint",
+    "leadHeadline": "Tell us about",
+    "leadHeadlineItalic": "the work.",
+    "leadBody": "We read every letter. Our engineering team will reply inside a working day — usually from Mumbai, occasionally from a deck somewhere off the Indian coast.",
+    "headOffice": "Head office",
+    "direct": "Direct",
+    "accreditation": "Accreditation",
+    "follow": "Follow",
+    "since": "Since MCMLXXVIII",
+    "copyright": "© {{year}} {{name}} · A {{parent}} Company",
+    "privacy": "Privacy",
+    "terms": "Terms"
+  },
+  "buttons": {
+    "beginProject": "Begin a project",
+    "viewProjects": "View our projects",
+    "browseProjects": "Browse projects",
+    "startProject": "Start a project",
+    "sendEnquiry": "Send enquiry",
+    "fullArchive": "Full archive",
+    "allServices": "All twelve services",
+    "beginConversation": "Begin a conversation",
+    "reviewArchive": "Review the full archive",
+    "browseRegister": "Browse the full register",
+    "readServices": "Read the full services",
+    "returnHome": "Return home",
+    "tryAgain": "Try again",
+    "getInTouch": "Get in touch"
+  },
+  "hero": {
+    "kicker": "Marine Infrastructure · Since 1978",
+    "kickerShort": "Since 1978",
+    "flagship": "Flagship of the Meka Group",
+    "selected": "Selected works / 03 of 12",
+    "headlineA": "We build where the",
+    "headlineAItalic": "land",
+    "headlineB": "meets the",
+    "headlineBItalic": "sea.",
+    "summary": "The flagship marine-construction firm of the Meka Group — delivering breakwaters, jetties and deepwater works across India and international waters since 1978."
+  },
+  "locale": {
+    "switcher": "Language",
+    "en": "English",
+    "hi": "हिन्दी",
+    "ar": "العربية"
+  },
+  "cookie": {
+    "kicker": "Notice · Data & cookies",
+    "body": "We use a small number of cookies to operate this site, measure how it is used, and improve it over time. We process personal data only for the purposes set out in our",
+    "privacy": "Privacy Policy",
+    "continue": ". By continuing you consent in line with India's Digital Personal Data Protection Act, 2023. You can decline non-essential use.",
+    "decline": "Decline non-essential",
+    "accept": "Accept all"
+  }
+}

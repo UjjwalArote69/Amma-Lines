@@ -1,98 +1,192 @@
-import React, { useRef } from 'react';
-import gsap from 'gsap';
-import { ScrollTrigger } from 'gsap/ScrollTrigger';
-import { useGSAP } from '@gsap/react';
+import { useRef, useState } from "react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
+import { useGSAP } from "@gsap/react";
+import { Link } from "react-router";
+import Button from "../../../components/ui/Button";
+import { projects } from "../../../data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const PortfolioSection = () => {
-  const containerRef = useRef(null);
+/* Curated selection — chronological spread across breakwaters, jetties and dredging. */
+const selection = [
+  "Floating Breakwater (Guide-bund)",
+  "Elephanta Island Jetty",
+  "Ennore Port Breakwaters",
+  "North & South Breakwaters",
+  "Dredging & Reclamation", // Reliance Industries Hazira 2016
+  "North Field Expansion (NFXP)",
+]
+  .map((t) => projects.find((p) => p.title === t))
+  .filter(Boolean)
+  .map((p, i) => ({
+    n: String(i + 1).padStart(2, "0"),
+    title: p.title,
+    location: p.location,
+    type: p.category + (p.metric ? ` · ${p.metric}` : ""),
+    year: p.year,
+    img: p.img,
+  }));
 
-  const projects = [
-    { title: 'Karaikal Port', status: 'Completed 2009', img: '/hero/karaikal_port.webp', height: 'h-[400px]', offset: '' },
-    { title: 'Ennore Port - Chennai', status: 'Completed 1999', img: '/hero/ennore_port.webp', height: 'h-[500px]', offset: 'md:-translate-y-12', isMiddle: true },
-    { title: 'Coastal Armoring System', status: 'Delivered', img: '/hero/elephanta_jetty.webp', height: 'h-[400px]', offset: 'md:translate-y-12' },
-  ];
+const PortfolioSection = () => {
+  const ref = useRef(null);
+  const previewRef = useRef(null);
+  const [hover, setHover] = useState(null);
 
   useGSAP(() => {
-    // 1. Text Reveals
-    gsap.fromTo('.portfolio-text-reveal', 
-      { y: '100%' }, 
-      { 
-        y: '0%', 
-        duration: 1.2, 
-        stagger: 0.1, 
-        ease: 'expo.out',
-        scrollTrigger: { trigger: '.portfolio-header', start: 'top 80%' }
+    gsap.fromTo(
+      ".pf-line",
+      { y: "105%" },
+      {
+        y: "0%",
+        duration: 1,
+        stagger: 0.06,
+        ease: "power2.out",
+        scrollTrigger: { trigger: ".pf-header", start: "top 80%" },
       }
     );
-
-    // 2. High-End Image Reveals & Parallax
-    const cards = gsap.utils.toArray('.portfolio-card');
-    cards.forEach((card) => {
-      const imgWrap = card.querySelector('.img-wrap');
-      const img = card.querySelector('img');
-
-      // The Mask Reveal
-      gsap.fromTo(imgWrap,
-        { clipPath: 'inset(100% 0% 0% 0%)' },
-        {
-          clipPath: 'inset(0% 0% 0% 0%)',
-          duration: 1.5,
-          ease: 'expo.inOut',
-          scrollTrigger: { trigger: card, start: 'top 85%' }
-        }
-      );
-
-      // The Parallax Scroll (Image moves slightly up inside the wrapper as you scroll)
-      gsap.fromTo(img,
-        { y: '-10%' },
-        {
-          y: '10%',
-          ease: 'none',
-          scrollTrigger: {
-            trigger: card,
-            start: 'top bottom',
-            end: 'bottom top',
-            scrub: true,
-          }
-        }
-      );
+    gsap.from(".pf-fade", {
+      scrollTrigger: { trigger: ".pf-header", start: "top 80%" },
+      opacity: 0,
+      y: 14,
+      duration: 0.8,
+      stagger: 0.05,
+      ease: "power3.out",
     });
-  }, { scope: containerRef });
+    gsap.from(".pf-row", {
+      scrollTrigger: { trigger: ".pf-list", start: "top 75%" },
+      opacity: 0,
+      y: 20,
+      duration: 0.8,
+      stagger: 0.06,
+      ease: "power3.out",
+    });
+
+    if (window.matchMedia("(hover: hover) and (pointer: fine)").matches) {
+      const xTo = gsap.quickTo(previewRef.current, "x", { duration: 0.5, ease: "power3.out" });
+      const yTo = gsap.quickTo(previewRef.current, "y", { duration: 0.5, ease: "power3.out" });
+
+      const onMove = (e) => {
+        const rect = ref.current.getBoundingClientRect();
+        xTo(e.clientX - rect.left);
+        yTo(e.clientY - rect.top);
+      };
+      const el = ref.current;
+      el.addEventListener("mousemove", onMove);
+      return () => {
+        el.removeEventListener("mousemove", onMove);
+      };
+    }
+  }, { scope: ref });
+
+  const current = hover !== null ? selection[hover] : null;
 
   return (
-    <section ref={containerRef} id="portfolio" className="w-full bg-white py-32 md:py-48 px-6 md:px-16 lg:px-24 border-t border-black/10">
-      <div className="max-w-7xl mx-auto">
-        
-        <div className="portfolio-header flex flex-col md:flex-row justify-between items-start md:items-end mb-16 md:mb-24 gap-6">
-          <div>
-            <div className="overflow-hidden"><span className="portfolio-text-reveal text-cyan-600 uppercase tracking-[0.2em] text-[10px] font-bold mb-4 block">[ 02 ] Impactful Projects</span></div>
-            <div className="overflow-hidden"><h2 className="portfolio-text-reveal text-5xl md:text-7xl font-black uppercase tracking-tighter text-black">The Portfolio</h2></div>
+    <section
+      ref={ref}
+      id="portfolio"
+      className="relative w-full px-6 md:px-12 lg:px-16 py-28 md:py-40 overflow-hidden"
+      style={{ backgroundColor: "var(--color-bone)" }}
+    >
+      <div className="max-w-[1500px] mx-auto">
+        <div className="pf-header grid grid-cols-12 gap-4 md:gap-6 mb-16 md:mb-20">
+          <div className="col-span-12 md:col-span-3">
+            <p className="pf-fade caption text-[var(--color-ink-50)]">
+              V · Selected works
+            </p>
+            <p className="pf-fade caption tabular text-[var(--color-ink-40)] mt-3">
+              1988 — 2024
+            </p>
           </div>
-          <button className="text-xs tracking-[0.2em] text-black/60 hover:text-black uppercase border-b border-black/30 pb-1 transition-colors">View All Works</button>
+          <div className="col-span-12 md:col-span-9 flex flex-col md:flex-row md:items-end justify-between gap-6">
+            <h2 className="font-display text-5xl md:text-7xl lg:text-[6rem] leading-[1] max-w-3xl">
+              <span className="reveal-line">
+                <span className="pf-line block">A chronology</span>
+              </span>
+              <span className="reveal-line">
+                <span className="pf-line block italic text-[var(--color-ink-70)]">
+                  of tide and stone.
+                </span>
+              </span>
+            </h2>
+            <div className="pf-fade self-start md:self-auto">
+              <Button to="/projects" variant="primary">
+                Full archive
+              </Button>
+            </div>
+          </div>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-8 lg:gap-12">
-          {projects.map((proj, i) => (
-            <div key={i} className={`portfolio-card group cursor-pointer ${proj.offset}`}>
-              {/* Outer wrapper manages dimensions, Inner handles clip-path mask */}
-              <div className={`relative overflow-hidden mb-6 ${proj.height}`}>
-                <div className="img-wrap absolute inset-0 w-full h-full origin-bottom">
-                   <img 
-                     src={proj.img} 
-                     alt={proj.title} 
-                     // Scale 110% ensures the parallax has room to move without showing empty space
-                     className="w-full h-full object-cover scale-[1.15] grayscale group-hover:grayscale-0 transition-all duration-700" 
-                   />
+        <ul className="pf-list flex flex-col border-t border-[var(--color-ink-20)]">
+          {selection.map((p, i) => (
+            <li
+              key={`${p.title}-${p.year}`}
+              onMouseEnter={() => setHover(i)}
+              onMouseLeave={() => setHover(null)}
+              className="pf-row"
+            >
+              <Link
+                to="/projects"
+                className="group grid grid-cols-12 gap-4 md:gap-8 items-center py-7 md:py-9 border-b border-[var(--color-ink-12)] hover:border-[var(--color-ink)] transition-colors"
+              >
+                <span className="col-span-2 md:col-span-1 caption tabular text-[var(--color-ink-40)]">
+                  / {p.n}
+                </span>
+
+                <div className="col-span-10 md:col-span-6">
+                  <h3 className="font-display text-3xl md:text-5xl lg:text-[3.6rem] leading-[1.02] text-[var(--color-ink)] transition-all duration-500 group-hover:translate-x-4">
+                    {p.title}
+                    <span
+                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 italic text-[var(--color-ink-50)] ml-3"
+                      aria-hidden
+                    >
+                      ↗
+                    </span>
+                  </h3>
                 </div>
-              </div>
-              
-              {proj.isMiddle && <div className="w-8 h-[2px] bg-cyan-600 mb-4"></div>}
-              <div className="overflow-hidden"><span className="text-cyan-600 uppercase tracking-[0.2em] text-[9px] font-bold mb-2 block">{proj.status}</span></div>
-              <div className="overflow-hidden"><h3 className="text-xl font-bold uppercase tracking-tight text-black">{proj.title}</h3></div>
-            </div>
+
+                <div className="col-span-6 md:col-span-3 hidden md:block">
+                  <p className="caption text-[var(--color-ink-70)]">{p.type}</p>
+                  <p className="caption text-[var(--color-ink-40)] mt-1">
+                    {p.location}
+                  </p>
+                </div>
+
+                <div className="col-span-6 md:col-span-2 flex md:justify-end">
+                  <span className="font-display tabular text-xl md:text-2xl text-[var(--color-ink)]">
+                    {p.year}
+                  </span>
+                </div>
+
+                <div className="col-span-12 md:hidden">
+                  <p className="caption text-[var(--color-ink-70)]">{p.type}</p>
+                  <p className="caption text-[var(--color-ink-40)] mt-1">
+                    {p.location}
+                  </p>
+                </div>
+              </Link>
+            </li>
           ))}
+        </ul>
+      </div>
+
+      {/* Cursor-follow preview */}
+      <div
+        ref={previewRef}
+        className="pointer-events-none absolute top-0 left-0 hidden md:block"
+        style={{ zIndex: 5, transform: "translate3d(0,0,0)" }}
+      >
+        <div
+          className="-translate-x-1/2 -translate-y-1/2 w-[320px] h-[200px] overflow-hidden transition-opacity duration-300"
+          style={{ opacity: current ? 1 : 0 }}
+        >
+          {current && (
+            <img loading="lazy" decoding="async"
+              src={current.img}
+              alt={current.title}
+              className="w-full h-full object-cover duotone"
+            />
+          )}
         </div>
       </div>
     </section>
