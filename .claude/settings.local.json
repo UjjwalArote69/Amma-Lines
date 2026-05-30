@@ -7,7 +7,9 @@
       "WebFetch(domain:www.ammalines.com)",
       "WebFetch(domain:ammalines.com)",
       "Bash(npm install *)",
-      "Bash(npm cache *)"
+      "Bash(npm cache *)",
+      "Bash(xargs basename *)",
+      "Bash(npx vite *)"
     ]
   }
 }

@@ -1,4 +1,5 @@
 import { Link } from "react-router";
+import PageMasthead from "../../components/common/PageMasthead";
 
 /**
  * Shared shell for legal pages (Privacy, Terms).
@@ -9,28 +10,7 @@ const LegalLayout = ({ chapter, title, page, lastUpdated, children }) => (
     className="w-full min-h-screen overflow-hidden"
     style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
   >
-    {/* Masthead */}
-    <div className="px-6 md:px-12 lg:px-16 pt-32 md:pt-40">
-      <div className="max-w-[1500px] mx-auto">
-        <div
-          className="h-[1px] w-full"
-          style={{ backgroundColor: "var(--color-ink)" }}
-        />
-        <div className="flex items-center justify-between py-3">
-          <span className="caption text-[var(--color-ink)]">{chapter}</span>
-          <span className="caption text-[var(--color-ink-50)] hidden md:inline">
-            {title}
-          </span>
-          <span className="caption tabular text-[var(--color-ink-50)]">
-            {page}
-          </span>
-        </div>
-        <div
-          className="h-[1px] w-full"
-          style={{ backgroundColor: "var(--color-ink-12)" }}
-        />
-      </div>
-    </div>
+    <PageMasthead chapter={chapter} title={title} page={page} />
 
     {/* Lede */}
     <section className="px-6 md:px-12 lg:px-16 pt-12 md:pt-20 pb-16 md:pb-24">

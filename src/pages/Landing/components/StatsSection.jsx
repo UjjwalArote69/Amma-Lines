@@ -2,44 +2,46 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useTranslation } from "react-i18next";
 import { certifications } from "../../../data/company";
 import { derivedStats } from "../../../data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const stats = [
-  {
-    n: "1978",
-    unit: "",
-    label: "Incorporated in Mumbai",
-    method: "CIN · U74999TN1978PTC007674 · Founded by Dr. Meka Papa Rao",
-  },
-  {
-    n: `${derivedStats.dredgedVolumeMillionM3}`,
-    unit: "M m³",
-    label: "Dredged & reclaimed",
-    method: "Across Karaikal, Hazira, Kochi and Kakinada projects",
-  },
-  {
-    n: "5.7",
-    unit: "km",
-    label: "Breakwater delivered",
-    method: "JNPT (650 m) · Ennore (4 km) · Karaikal (1,300 m)",
-  },
-  {
-    n: "ISO",
-    unit: "3",
-    label: "Certified operations",
-    method: "9001 · 14001 · 45001 — QHSE-audited across all works",
-  },
-];
-
 const StatsSection = () => {
   const ref = useRef(null);
+  const { t } = useTranslation();
+
+  const stats = [
+    {
+      n: t("stats.card1Number"),
+      unit: "",
+      label: t("stats.card1Label"),
+      method: t("stats.card1Method"),
+    },
+    {
+      n: `${derivedStats.dredgedVolumeMillionM3}`,
+      unit: t("stats.card2Unit"),
+      label: t("stats.card2Label"),
+      method: t("stats.card2Method"),
+    },
+    {
+      n: "5.7",
+      unit: t("stats.card3Unit"),
+      label: t("stats.card3Label"),
+      method: t("stats.card3Method"),
+    },
+    {
+      n: t("stats.card4Number"),
+      unit: t("stats.card4Unit"),
+      label: t("stats.card4Label"),
+      method: t("stats.card4Method"),
+    },
+  ];
 
   useGSAP(() => {
     gsap.from(".st", {
-      scrollTrigger: { trigger: ref.current, start: "top 80%" },
+      scrollTrigger: { trigger: ref.current, start: "top 80%", once: true },
       y: 40,
       opacity: 0,
       duration: 0.9,
@@ -47,7 +49,7 @@ const StatsSection = () => {
       ease: "power2.out",
     });
     gsap.from(".cert-row", {
-      scrollTrigger: { trigger: ".certs-block", start: "top 85%" },
+      scrollTrigger: { trigger: ".certs-block", start: "top 85%", once: true },
       opacity: 0,
       y: 12,
       duration: 0.7,
@@ -67,9 +69,11 @@ const StatsSection = () => {
     >
       <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
         <div className="col-span-12 md:col-span-3 mb-8 md:mb-0">
-          <p className="caption text-[var(--color-ink-50)]">IV · The Ledger</p>
+          <p className="caption text-[var(--color-ink-50)]">
+            {t("stats.kicker")}
+          </p>
           <p className="caption tabular text-[var(--color-ink-40)] mt-3">
-            Verifiable works, not vanity metrics
+            {t("stats.subtitle")}
           </p>
         </div>
 
@@ -105,7 +109,7 @@ const StatsSection = () => {
         <div className="col-span-12 mt-16 md:mt-20 certs-block">
           <div className="grid grid-cols-12 gap-4 md:gap-6 items-start">
             <p className="col-span-12 md:col-span-3 caption text-[var(--color-ink-50)]">
-              Accredited operations
+              {t("stats.accredited")}
             </p>
             <dl className="col-span-12 md:col-span-9 grid grid-cols-1 md:grid-cols-3 gap-6 md:gap-10">
               {certifications.map((c, i) => (
@@ -118,7 +122,7 @@ const StatsSection = () => {
                   </span>
                   <div className="flex flex-col">
                     <dt className="caption text-[var(--color-ink-50)]">
-                      {c.k}
+                      {t(`certifications.${c.k}`, c.k)}
                     </dt>
                     <dd className="font-display text-xl md:text-2xl text-[var(--color-ink)] mt-1">
                       {c.v}

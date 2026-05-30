@@ -3,30 +3,18 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { useLocation } from "react-router";
+import { useTranslation } from "react-i18next";
 import Button from "../../components/ui/Button";
 import SEO from "../../components/common/SEO";
+import PageMasthead from "../../components/common/PageMasthead";
 import { services } from "../../data/services";
 
 gsap.registerPlugin(ScrollTrigger);
 
-const servicesJsonLd = {
-  "@context": "https://schema.org",
-  "@type": "ItemList",
-  name: "Amma Lines services",
-  url: "https://ammalines.com/services",
-  numberOfItems: services.length,
-  itemListElement: services.map((s, i) => ({
-    "@type": "ListItem",
-    position: i + 1,
-    name: s.title,
-    url: `https://ammalines.com/services#${s.slug}`,
-    description: s.body,
-  })),
-};
-
 const Services = () => {
   const ref = useRef(null);
   const { hash } = useLocation();
+  const { t } = useTranslation();
 
   useEffect(() => {
     if (!hash) return;
@@ -38,6 +26,21 @@ const Services = () => {
       }, 400);
     }
   }, [hash]);
+
+  const servicesJsonLd = {
+    "@context": "https://schema.org",
+    "@type": "ItemList",
+    name: "Amma Lines services",
+    url: "https://ammalines.com/services",
+    numberOfItems: services.length,
+    itemListElement: services.map((s, i) => ({
+      "@type": "ListItem",
+      position: i + 1,
+      name: t(`services.catalog.${s.slug}.title`),
+      url: `https://ammalines.com/services#${s.slug}`,
+      description: t(`services.catalog.${s.slug}.body`),
+    })),
+  };
 
   useGSAP(() => {
     gsap.fromTo(
@@ -54,6 +57,10 @@ const Services = () => {
       ease: "power3.out",
     });
 
+    const isFinePointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    ).matches;
+
     const rows = gsap.utils.toArray(".s-row");
     rows.forEach((row) => {
       gsap.fromTo(
@@ -64,7 +71,7 @@ const Services = () => {
           opacity: 1,
           duration: 1,
           ease: "power2.out",
-          scrollTrigger: { trigger: row, start: "top 85%" },
+          scrollTrigger: { trigger: row, start: "top 85%", once: true },
         }
       );
       const wrap = row.querySelector(".s-img-wrap");
@@ -77,23 +84,25 @@ const Services = () => {
             clipPath: "inset(0% 0% 0% 0%)",
             duration: 1.4,
             ease: "power2.inOut",
-            scrollTrigger: { trigger: row, start: "top 80%" },
+            scrollTrigger: { trigger: row, start: "top 80%", once: true },
           }
         );
-        gsap.fromTo(
-          img,
-          { y: "-8%" },
-          {
-            y: "8%",
-            ease: "none",
-            scrollTrigger: {
-              trigger: row,
-              start: "top bottom",
-              end: "bottom top",
-              scrub: true,
-            },
-          }
-        );
+        if (isFinePointer) {
+          gsap.fromTo(
+            img,
+            { y: "-8%" },
+            {
+              y: "8%",
+              ease: "none",
+              scrollTrigger: {
+                trigger: row,
+                start: "top bottom",
+                end: "bottom top",
+                scrub: true,
+              },
+            }
+          );
+        }
       }
     });
   }, { scope: ref });
@@ -112,57 +121,37 @@ const Services = () => {
         className="w-full min-h-screen overflow-hidden"
         style={{ backgroundColor: "var(--color-bone)", color: "var(--color-ink)" }}
       >
-      {/* Masthead */}
-      <div className="px-6 md:px-12 lg:px-16 pt-32 md:pt-40">
-        <div className="max-w-[1500px] mx-auto">
-          <div
-            className="h-[1px] w-full"
-            style={{ backgroundColor: "var(--color-ink)" }}
-          />
-          <div className="flex items-center justify-between py-3">
-            <span className="caption text-[var(--color-ink)]">
-              III · Services
-            </span>
-            <span className="caption text-[var(--color-ink-50)] hidden md:inline">
-              Twelve Disciplines, In-House
-            </span>
-            <span className="caption tabular text-[var(--color-ink-50)]">
-              01 — 12
-            </span>
-          </div>
-          <div
-            className="h-[1px] w-full"
-            style={{ backgroundColor: "var(--color-ink-12)" }}
-          />
-        </div>
-      </div>
+      <PageMasthead
+        chapter={t("services.chapter")}
+        title={t("services.title")}
+        page={t("services.range")}
+      />
 
       {/* Lede */}
       <section className="px-6 md:px-12 lg:px-16 pt-12 md:pt-20 pb-16 md:pb-24">
         <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
           <div className="col-span-12 md:col-span-3">
             <p className="s-fade caption text-[var(--color-ink-50)]">
-              What we practice
+              {t("services.ledeKicker")}
             </p>
           </div>
           <div className="col-span-12 md:col-span-9">
             <h1 className="font-display text-6xl md:text-8xl lg:text-[8.5rem] leading-[0.95] tracking-[-0.02em]">
               <span className="reveal-line">
-                <span className="s-line block">Twelve disciplines</span>
+                <span className="s-line block">{t("services.ledeHeadlineA")}</span>
               </span>
               <span className="reveal-line">
                 <span className="s-line block italic text-[var(--color-ink-70)]">
-                  one practice
+                  {t("services.ledeHeadlineAItalic")}
                 </span>
               </span>
               <span className="reveal-line">
-                <span className="s-line block">under one roof.</span>
+                <span className="s-line block">{t("services.ledeHeadlineB")}</span>
               </span>
             </h1>
 
             <p className="s-fade mt-12 max-w-2xl text-[17px] md:text-[19px] leading-relaxed text-[var(--color-ink-70)]">
-              Every discipline below is delivered by our own engineers,
-              crews and fleet. We do not mediate marine works.
+              {t("services.ledeBody")}
             </p>
           </div>
         </div>
@@ -187,7 +176,7 @@ const Services = () => {
                 /{s.n}
               </span>
               <span className="caption text-[var(--color-ink-70)] group-hover:text-[var(--color-marine)] transition-colors">
-                {s.title}
+                {t(`services.catalog.${s.slug}.title`)}
               </span>
             </a>
           ))}
@@ -197,68 +186,75 @@ const Services = () => {
       {/* Services list */}
       <section className="px-6 md:px-12 lg:px-16">
         <div className="max-w-[1500px] mx-auto flex flex-col">
-          {services.map((s, i) => (
-            <article
-              key={s.slug}
-              id={s.slug}
-              className={`s-row scroll-mt-28 grid grid-cols-12 gap-6 md:gap-10 py-20 md:py-28 ${
-                i !== 0 ? "border-t border-[var(--color-ink-12)]" : ""
-              }`}
-            >
-              <div className="col-span-12 md:col-span-2 flex md:flex-col justify-between md:justify-start gap-4 md:gap-10">
-                <span className="caption tabular text-[var(--color-ink-40)]">
-                  / {s.n}
-                </span>
-                <span className="caption text-[var(--color-ink-70)]">
-                  {s.short}
-                </span>
-              </div>
-
-              <div className="s-content col-span-12 md:col-span-5 flex flex-col gap-6">
-                <h2 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05]">
-                  {s.title}
-                </h2>
-                <p className="text-[17px] leading-relaxed text-[var(--color-ink-70)] max-w-xl">
-                  {s.body}
-                </p>
-                <ul className="mt-2 flex flex-col gap-1">
-                  {s.deliverables.map((d) => (
-                    <li
-                      key={d}
-                      className="flex items-start gap-3 text-[14px] leading-relaxed text-[var(--color-ink-70)] border-t border-[var(--color-ink-12)] pt-2 first:border-t-0 first:pt-0"
-                    >
-                      <span className="caption tabular text-[var(--color-ink-40)] pt-[2px]">
-                        —
-                      </span>
-                      <span>{d}</span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-
-              <figure className="col-span-12 md:col-span-5">
-                <div className="s-img-wrap overflow-hidden w-full h-[360px] md:h-[460px] bg-[var(--color-ink-08)]">
-                  <img loading="lazy" decoding="async"
-                    src={s.img}
-                    alt={s.title}
-                    className="w-full h-full object-cover scale-[1.08] duotone"
-                  />
-                </div>
-                <figcaption className="mt-3 flex items-start justify-between gap-4 caption text-[var(--color-ink-50)]">
-                  <span>
-                    Fig. {s.n} · {s.title}
+          {services.map((s, i) => {
+            const deliverables =
+              t(`services.catalog.${s.slug}.d`, { returnObjects: true }) || [];
+            const title = t(`services.catalog.${s.slug}.title`);
+            const short = t(`services.catalog.${s.slug}.short`);
+            const body = t(`services.catalog.${s.slug}.body`);
+            return (
+              <article
+                key={s.slug}
+                id={s.slug}
+                className={`s-row scroll-mt-28 grid grid-cols-12 gap-6 md:gap-10 py-20 md:py-28 ${
+                  i !== 0 ? "border-t border-[var(--color-ink-12)]" : ""
+                }`}
+              >
+                <div className="col-span-12 md:col-span-2 flex md:flex-col justify-between md:justify-start gap-4 md:gap-10">
+                  <span className="caption tabular text-[var(--color-ink-40)]">
+                    / {s.n}
                   </span>
-                  <span className="tabular">In-house</span>
-                </figcaption>
-              </figure>
-            </article>
-          ))}
+                  <span className="caption text-[var(--color-ink-70)]">
+                    {short}
+                  </span>
+                </div>
+
+                <div className="s-content col-span-12 md:col-span-5 flex flex-col gap-6">
+                  <h2 className="font-display text-4xl md:text-5xl lg:text-[3.5rem] leading-[1.05]">
+                    {title}
+                  </h2>
+                  <p className="text-[17px] leading-relaxed text-[var(--color-ink-70)] max-w-xl">
+                    {body}
+                  </p>
+                  <ul className="mt-2 flex flex-col gap-1">
+                    {(Array.isArray(deliverables) ? deliverables : []).map((d) => (
+                      <li
+                        key={d}
+                        className="flex items-start gap-3 text-[14px] leading-relaxed text-[var(--color-ink-70)] border-t border-[var(--color-ink-12)] pt-2 first:border-t-0 first:pt-0"
+                      >
+                        <span className="caption tabular text-[var(--color-ink-40)] pt-[2px]">
+                          —
+                        </span>
+                        <span>{d}</span>
+                      </li>
+                    ))}
+                  </ul>
+                </div>
+
+                <figure className="col-span-12 md:col-span-5">
+                  <div className="s-img-wrap overflow-hidden w-full h-[360px] md:h-[460px] bg-[var(--color-ink-08)]">
+                    <img loading="lazy" decoding="async"
+                      src={s.img}
+                      alt={title}
+                      className="w-full h-full object-cover scale-[1.08] duotone"
+                    />
+                  </div>
+                  <figcaption className="mt-3 flex items-start justify-between gap-4 caption text-[var(--color-ink-50)]">
+                    <span>
+                      {t("services.figPrefix")} {s.n} · {title}
+                    </span>
+                    <span className="tabular">{t("services.inHouse")}</span>
+                  </figcaption>
+                </figure>
+              </article>
+            );
+          })}
         </div>
       </section>
 
       {/* CTA */}
       <section
-        className="px-6 md:px-12 lg:px-16 py-28 md:py-40 border-t"
+        className="px-6 md:px-12 lg:px-16 py-20 md:py-40 border-t"
         style={{
           backgroundColor: "var(--color-ink)",
           color: "var(--color-bone)",
@@ -268,18 +264,18 @@ const Services = () => {
         <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-6 items-end">
           <div className="col-span-12 md:col-span-9">
             <p className="caption text-[var(--color-bone-50)] mb-6">
-              Technical enquiry
+              {t("services.ctaKicker")}
             </p>
             <h2 className="font-display text-5xl md:text-7xl leading-[1.05]">
-              Considering a marine work?<br />
+              {t("services.ctaHeadline")}<br />
               <em className="italic text-[var(--color-bone-70)]">
-                Let us walk the site with you.
+                {t("services.ctaHeadlineItalic")}
               </em>
             </h2>
           </div>
           <div className="col-span-12 md:col-span-3 flex md:justify-end">
             <Button to="/contact" variant="primary-light">
-              Begin a conversation
+              {t("buttons.beginConversation")}
             </Button>
           </div>
         </div>

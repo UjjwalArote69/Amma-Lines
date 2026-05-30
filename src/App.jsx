@@ -10,7 +10,6 @@ import Footer from "./components/layout/Footer";
 import Preloader from "./components/layout/Preloader";
 import ErrorBoundary from "./components/common/ErrorBoundary";
 import RouteLoader from "./components/common/RouteLoader";
-import CookieBanner from "./components/common/CookieBanner";
 
 /* ----- Route chunks — code-split per page ------------------------ */
 const LandingPage = lazy(() => import("./pages/Landing/LandingPage"));
@@ -50,7 +49,6 @@ const App = () => {
           </Routes>
         </Suspense>
         <Footer />
-        <CookieBanner />
       </Router>
     </ErrorBoundary>
   );

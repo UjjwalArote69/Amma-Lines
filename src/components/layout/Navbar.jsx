@@ -7,7 +7,8 @@ import { introDelay } from "../../utils/preloader";
 import { services } from "../../data/services";
 import LocaleSwitcher from "../common/LocaleSwitcher";
 
-const servicesList = services.map((s) => ({ name: s.title, slug: s.slug }));
+/* Services list — titles are resolved per-locale inside the component. */
+const servicesSlugs = services.map((s) => s.slug);
 
 const navLinks = [
   { key: "home", path: "/", kind: "link" },
@@ -145,7 +146,7 @@ const Navbar = () => {
                     key={l.key}
                     to={l.path}
                     aria-current={active ? "page" : undefined}
-                    className="group relative inline-flex items-center gap-2 pl-5 pr-1.5 py-1.5 rounded-full transition-all duration-400 ml-2 lg:ml-3 overflow-hidden"
+                    className="group relative inline-flex items-center gap-2 ps-5 pe-1.5 py-1.5 rounded-full transition-all duration-400 ms-2 lg:ms-3 overflow-hidden"
                     style={{
                       backgroundColor: active
                         ? "var(--color-marine-deep)"
@@ -158,7 +159,7 @@ const Navbar = () => {
                   >
                     {/* Shimmer on hover */}
                     <span
-                      className="absolute inset-0 -translate-x-full group-hover:translate-x-full transition-transform duration-[1200ms] ease-out"
+                      className="absolute inset-0 ltr:-translate-x-full rtl:translate-x-full ltr:group-hover:translate-x-full rtl:group-hover:-translate-x-full transition-transform duration-[1200ms] ease-out"
                       style={{
                         background:
                           "linear-gradient(90deg, transparent, rgba(255,255,255,0.18), transparent)",
@@ -168,13 +169,13 @@ const Navbar = () => {
                       {t(`nav.${l.key}`)}
                     </span>
                     <span
-                      className="relative h-7 w-7 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5"
+                      className="relative h-7 w-7 rounded-full flex items-center justify-center transition-transform duration-500 ltr:group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
                       style={{
                         backgroundColor: "rgba(255,255,255,0.22)",
                         color: "#fff",
                       }}
                     >
-                      →
+                      <span className="rtl-flip">→</span>
                     </span>
                   </Link>
                 );
@@ -382,7 +383,7 @@ const Navbar = () => {
                   <Link
                     to="/services"
                     onClick={() => setServicesOpen(false)}
-                    className="mt-6 group inline-flex items-center gap-3 pl-4 pr-1 py-1 rounded-full transition-all"
+                    className="mt-6 group inline-flex items-center gap-3 ps-4 pe-1 py-1 rounded-full transition-all"
                     style={{
                       backgroundColor: "var(--color-marine)",
                       color: "#fff",
@@ -392,22 +393,22 @@ const Navbar = () => {
                       {t("nav.servicesPanel.viewAll")}
                     </span>
                     <span
-                      className="h-6 w-6 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5"
+                      className="h-6 w-6 rounded-full flex items-center justify-center transition-transform duration-500 ltr:group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
                       style={{
                         backgroundColor: "rgba(255,255,255,0.22)",
                         color: "#fff",
                       }}
                     >
-                      →
+                      <span className="rtl-flip">→</span>
                     </span>
                   </Link>
                 </div>
 
                 <ul className="col-span-12 md:col-span-9 grid grid-cols-2 lg:grid-cols-3 gap-x-4 gap-y-0">
-                  {servicesList.map((s, i) => (
-                    <li key={s.slug}>
+                  {servicesSlugs.map((slug, i) => (
+                    <li key={slug}>
                       <Link
-                        to={`/services#${s.slug}`}
+                        to={`/services#${slug}`}
                         onClick={() => setServicesOpen(false)}
                         className="group flex items-center gap-4 py-3 px-3 -mx-3 rounded-lg border-b border-[var(--color-ink-08)] transition-colors hover:bg-[var(--color-ink-05)]"
                       >
@@ -415,13 +416,13 @@ const Navbar = () => {
                           {String(i + 1).padStart(2, "0")}
                         </span>
                         <span className="text-[15px] text-[var(--color-ink-80)] group-hover:text-[var(--color-marine-deep)] transition-colors flex-1">
-                          {s.name}
+                          {t(`services.catalog.${slug}.title`)}
                         </span>
                         <span
-                          className="text-[var(--color-marine)] opacity-0 -translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
+                          className="text-[var(--color-marine)] opacity-0 ltr:-translate-x-2 rtl:translate-x-2 group-hover:opacity-100 group-hover:translate-x-0 transition-all duration-300"
                           aria-hidden
                         >
-                          →
+                          <span className="rtl-flip">→</span>
                         </span>
                       </Link>
                     </li>
@@ -475,9 +476,9 @@ const Navbar = () => {
                             {t(`nav.${l.key}`)}
                             <span
                               aria-hidden
-                              className="inline-block ml-3 text-2xl text-[var(--color-ink-40)] align-baseline"
+                              className="inline-block ms-3 text-2xl text-[var(--color-ink-40)] align-baseline"
                             >
-                              ↗
+                              <span className="rtl-flip">↗</span>
                             </span>
                           </span>
                         </a>
@@ -528,7 +529,7 @@ const Navbar = () => {
                           className="nv-row block text-2xl text-[var(--color-ink-40)]"
                           aria-hidden
                         >
-                          ↗
+                          <span className="rtl-flip">↗</span>
                         </a>
                       ) : (
                         <Link
@@ -536,7 +537,7 @@ const Navbar = () => {
                           onClick={() => setOpen(false)}
                           className="nv-row block text-2xl text-[var(--color-ink-40)]"
                         >
-                          →
+                          <span className="rtl-flip">→</span>
                         </Link>
                       )}
                     </span>
@@ -551,14 +552,14 @@ const Navbar = () => {
                           : "max-h-0 opacity-0"
                       }`}
                     >
-                      <ul className="pl-1 flex flex-col">
-                        {servicesList.map((s, i) => (
+                      <ul className="ps-1 flex flex-col">
+                        {servicesSlugs.map((slug, i) => (
                           <li
-                            key={s.slug}
+                            key={slug}
                             className="border-t border-[var(--color-ink-08)]"
                           >
                             <Link
-                              to={`/services#${s.slug}`}
+                              to={`/services#${slug}`}
                               onClick={() => setOpen(false)}
                               className="py-2.5 flex items-baseline gap-3"
                             >
@@ -566,7 +567,7 @@ const Navbar = () => {
                                 {String(i + 1).padStart(2, "0")}
                               </span>
                               <span className="text-[15px] text-[var(--color-ink-80)]">
-                                {s.name}
+                                {t(`services.catalog.${slug}.title`)}
                               </span>
                             </Link>
                           </li>

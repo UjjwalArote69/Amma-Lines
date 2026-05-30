@@ -38,7 +38,7 @@ const LocaleSwitcher = ({ inline = false }) => {
         aria-haspopup="listbox"
         aria-expanded={open}
         aria-label={t("locale.switcher")}
-        className={`group relative inline-flex items-center gap-2 px-3 py-1.5 rounded-full transition-colors ${
+        className={`group relative inline-flex items-center gap-2 px-3 py-1.5 min-h-[40px] md:min-h-0 rounded-full transition-colors ${
           inline
             ? "hover:bg-[var(--color-ink-05)]"
             : "hover:bg-[var(--color-bone-15)]"
@@ -66,7 +66,7 @@ const LocaleSwitcher = ({ inline = false }) => {
       </button>
 
       <div
-        className={`absolute right-0 mt-2 min-w-[140px] transition-[opacity,transform] duration-200 ${
+        className={`absolute end-0 mt-2 min-w-[140px] transition-[opacity,transform] duration-200 ${
           open
             ? "opacity-100 translate-y-0 pointer-events-auto"
             : "opacity-0 -translate-y-1 pointer-events-none"
@@ -89,7 +89,7 @@ const LocaleSwitcher = ({ inline = false }) => {
                 <button
                   type="button"
                   onClick={() => pick(l.code)}
-                  className="w-full text-left flex items-baseline justify-between gap-4 px-4 py-2 hover:bg-[var(--color-ink-05)] transition-colors"
+                  className="w-full text-start flex items-baseline justify-between gap-4 px-4 py-3 md:py-2 min-h-[44px] md:min-h-0 hover:bg-[var(--color-ink-05)] transition-colors"
                   dir={l.dir}
                 >
                   <span

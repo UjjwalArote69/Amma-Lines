@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 
 const STORAGE_KEY = "amma-lines:consent";
 const VERSION = "1"; // bump to re-prompt users after a material policy change
@@ -42,6 +43,7 @@ const writeConsent = (status) => {
 
 const CookieBanner = () => {
   const [visible, setVisible] = useState(false);
+  const { t } = useTranslation();
 
   useEffect(() => {
     // Only render on the client, and only if no prior consent recorded.
@@ -85,20 +87,17 @@ const CookieBanner = () => {
       >
         <div className="col-span-12 md:col-span-8">
           <p className="caption text-[var(--color-bone-50)] mb-2">
-            Notice · Data &amp; cookies
+            {t("cookie.kicker")}
           </p>
           <p className="text-[14px] md:text-[15px] leading-[1.55] text-[var(--color-bone)] max-w-2xl">
-            We use a small number of cookies to operate this site, measure how
-            it is used, and improve it over time. We process personal data
-            only for the purposes set out in our{" "}
+            {t("cookie.body")}{" "}
             <Link
               to="/privacy"
               className="underline underline-offset-2 hover:text-[var(--color-marine-soft)] transition-colors"
             >
-              Privacy Policy
+              {t("cookie.privacy")}
             </Link>
-            . By continuing you consent in line with India's Digital Personal
-            Data Protection Act, 2023. You can decline non-essential use.
+            {t("cookie.continue")}
           </p>
         </div>
 
@@ -108,18 +107,18 @@ const CookieBanner = () => {
             onClick={decline}
             className="caption text-[var(--color-bone-70)] hover:text-[var(--color-bone)] transition-colors border-b border-[var(--color-bone-30)] hover:border-[var(--color-bone)] pb-1"
           >
-            Decline non-essential
+            {t("cookie.decline")}
           </button>
           <button
             type="button"
             onClick={accept}
-            className="inline-flex items-center gap-3 pl-4 pr-1.5 py-1.5 rounded-full"
+            className="inline-flex items-center gap-3 ps-4 pe-1.5 py-1.5 rounded-full"
             style={{
               backgroundColor: "var(--color-bone)",
               color: "var(--color-ink)",
             }}
           >
-            <span className="caption">Accept all</span>
+            <span className="caption">{t("cookie.accept")}</span>
             <span
               className="h-7 w-7 rounded-full flex items-center justify-center"
               style={{ backgroundColor: "rgba(10,28,46,0.12)" }}

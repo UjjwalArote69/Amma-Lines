@@ -2,16 +2,18 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useTranslation } from "react-i18next";
 import { company } from "../../../data/company";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const VisionSection = () => {
   const ref = useRef(null);
+  const { t } = useTranslation();
 
   useGSAP(() => {
     const tl = gsap.timeline({
-      scrollTrigger: { trigger: ref.current, start: "top 75%" },
+      scrollTrigger: { trigger: ref.current, start: "top 75%", once: true },
     });
 
     tl.fromTo(
@@ -32,51 +34,59 @@ const VisionSection = () => {
         "-=0.9"
       );
 
-    gsap.to(".v-parallax", {
-      yPercent: 8,
-      ease: "none",
-      scrollTrigger: {
-        trigger: ref.current,
-        start: "top bottom",
-        end: "bottom top",
-        scrub: true,
-      },
-    });
+    /* Scroll-scrubbed parallax is expensive on mobile — each touchmove
+       triggers a full GSAP update. Restrict to devices with a fine
+       pointer (desktop with mouse). */
+    const isFinePointer = window.matchMedia(
+      "(hover: hover) and (pointer: fine)"
+    ).matches;
+
+    if (isFinePointer) {
+      gsap.to(".v-parallax", {
+        yPercent: 8,
+        ease: "none",
+        scrollTrigger: {
+          trigger: ref.current,
+          start: "top bottom",
+          end: "bottom top",
+          scrub: true,
+        },
+      });
+    }
   }, { scope: ref });
 
   return (
     <section
       ref={ref}
       id="vision"
-      className="relative w-full px-6 md:px-12 lg:px-16 py-28 md:py-40"
+      className="relative w-full px-6 md:px-12 lg:px-16 py-20 md:py-40"
       style={{ backgroundColor: "var(--color-paper)", color: "var(--color-ink)" }}
     >
       <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
         <div className="col-span-12 md:col-span-3">
           <p className="v-fade caption text-[var(--color-ink-50)]">
-            III · Practice
+            {t("vision.kicker")}
           </p>
           <p className="v-fade caption tabular text-[var(--color-ink-40)] mt-3">
-            Section 01 / 05
+            {t("vision.section")}
           </p>
         </div>
 
         <div className="col-span-12 md:col-span-9">
-          {/* Lede — the company's own vision, restated. */}
           <h2 className="font-display text-4xl md:text-6xl lg:text-[5.2rem] leading-[1.04] text-[var(--color-ink)] max-w-[22ch]">
             <span className="reveal-line">
-              <span className="v-line block">Redefining marine and port</span>
+              <span className="v-line block">{t("vision.headlineA")}</span>
             </span>
             <span className="reveal-line">
               <span className="v-line block italic text-[var(--color-ink-70)]">
-                infrastructure
+                {t("vision.headlineAItalic")}
               </span>
             </span>
             <span className="reveal-line">
-              <span className="v-line block">with innovation,</span>
+              <span className="v-line block">{t("vision.headlineB")}</span>
             </span>
             <span className="reveal-line">
-              <span className="v-line block">reliability &amp; sustainability.</span>
+              <span className="v-line block">{t("vision.headlineC")}</span>
             </span>
           </h2>
 
@@ -85,38 +95,29 @@ const VisionSection = () => {
               <div className="v-mask overflow-hidden h-[440px] md:h-[560px] bg-[var(--color-ink-08)]">
                 <img loading="lazy" decoding="async"
                   src="/hero/vision_section.webp"
-                  alt="Coastal engineering works"
+                  alt={t("vision.figCaption")}
                   className="v-parallax w-full h-full object-cover duotone scale-[1.08]"
                 />
               </div>
               <figcaption className="mt-3 flex items-start justify-between gap-4 caption text-[var(--color-ink-50)]">
-                <span>Fig. IV · Coastal works</span>
-                <span className="tabular">Since 1978</span>
+                <span>{t("vision.figCaption")}</span>
+                <span className="tabular">{t("vision.figCaptionSince")}</span>
               </figcaption>
             </figure>
 
             <div className="col-span-12 md:col-span-7 md:pt-8">
               <p className="v-fade dropcap text-[17px] md:text-[19px] leading-[1.7] text-[var(--color-ink-80)] max-w-[56ch]">
-                Incorporated in Mumbai on 13 December 1978 by{" "}
-                {company.founder}, Amma Lines grew from a pioneering marine
-                construction company into the flagship of the Meka Group.
-                Over four decades, we have delivered most of India's major
-                breakwaters — including the longest, at Tuticorin Port —
-                along with landmark jetties, deepwater dredging and
-                reclamation works.
+                {t("vision.body1", { founder: company.founder })}
               </p>
 
               <p className="v-fade mt-6 text-[17px] md:text-[19px] leading-[1.7] text-[var(--color-ink-70)] max-w-[56ch]">
-                Our works are delivered by our own engineers, crews and
-                fleet under an ISO-certified QHSE management system.
-                Dredging is now executed primarily through our sister
-                company, Meka Dredging.
+                {t("vision.body2")}
               </p>
 
               <div className="v-fade mt-10 grid grid-cols-3 gap-6 border-t border-[var(--color-ink-12)] pt-8">
                 <div>
                   <p className="caption text-[var(--color-ink-50)] mb-2">
-                    Founded
+                    {t("vision.founded")}
                   </p>
                   <p className="font-display tabular text-2xl md:text-3xl">
                     1978
@@ -124,18 +125,18 @@ const VisionSection = () => {
                 </div>
                 <div>
                   <p className="caption text-[var(--color-ink-50)] mb-2">
-                    Registered
+                    {t("vision.registered")}
                   </p>
                   <p className="font-display text-2xl md:text-3xl">
-                    Mumbai
+                    {t("vision.registeredValue")}
                   </p>
                 </div>
                 <div>
                   <p className="caption text-[var(--color-ink-50)] mb-2">
-                    Group
+                    {t("vision.group")}
                   </p>
                   <p className="font-display text-2xl md:text-3xl">
-                    Meka
+                    {t("vision.groupValue")}
                   </p>
                 </div>
               </div>

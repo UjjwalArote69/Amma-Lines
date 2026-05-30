@@ -3,26 +3,24 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import Button from "../ui/Button";
 import { company, contact, social, certifications } from "../../data/company";
 
 gsap.registerPlugin(ScrollTrigger);
 
 const navIndex = [
-  { label: "Home", to: "/" },
-  { label: "About", to: "/about" },
-  { label: "Projects", to: "/projects" },
-  { label: "Services", to: "/services" },
-  {
-    label: "Careers",
-    href: "https://meka.com/careers",
-    external: true,
-  },
-  { label: "Contact", to: "/contact" },
+  { key: "home", to: "/" },
+  { key: "about", to: "/about" },
+  { key: "projects", to: "/projects" },
+  { key: "services", to: "/services" },
+  { key: "careers", href: "https://meka.com/careers", external: true },
+  { key: "contact", to: "/contact" },
 ];
 
 const Footer = () => {
   const ref = useRef(null);
+  const { t } = useTranslation();
 
   useGSAP(() => {
     /* Using gsap.from (not fromTo) + small pixel offsets — if a tween
@@ -37,6 +35,7 @@ const Footer = () => {
       scrollTrigger: {
         trigger: ref.current,
         start: "top 85%",
+        once: true,
       },
     });
   }, { scope: ref });
@@ -61,27 +60,27 @@ const Footer = () => {
         <div className="max-w-[1500px] mx-auto grid grid-cols-12 gap-4 md:gap-6">
           <div className="col-span-12 md:col-span-3">
             <p className="ft-reveal caption text-[var(--color-bone-50)]">
-              Correspondence
+              {t("footer.correspondence")}
             </p>
             <p className="ft-reveal caption tabular text-[var(--color-bone-50)] mt-3">
-              Imprint
+              {t("footer.imprint")}
             </p>
           </div>
           <div className="col-span-12 md:col-span-9">
             <h2 className="ft-reveal font-display text-5xl md:text-7xl lg:text-[6.5rem] leading-[1.0] text-[var(--color-bone)] max-w-4xl">
-              Tell us about{" "}
-              <em className="italic text-[var(--color-bone-70)]">the work.</em>
+              {t("footer.leadHeadline")}{" "}
+              <em className="italic text-[var(--color-bone-70)]">
+                {t("footer.leadHeadlineItalic")}
+              </em>
             </h2>
 
             <div className="ft-reveal mt-10 md:mt-14 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
               <p className="max-w-xl text-[17px] leading-relaxed text-[var(--color-bone-70)]">
-                We read every letter. Our engineering team will reply inside
-                a working day — usually from Mumbai, occasionally from a
-                deck somewhere off the Indian coast.
+                {t("footer.leadBody")}
               </p>
               <div className="self-start">
                 <Button to="/contact" variant="primary-light">
-                  Begin a project
+                  {t("buttons.beginProject")}
                 </Button>
               </div>
             </div>
@@ -98,7 +97,7 @@ const Footer = () => {
           {/* Office */}
           <div className="ft-reveal col-span-12 md:col-span-4">
             <p className="caption text-[var(--color-bone-50)] mb-5">
-              Head office
+              {t("footer.headOffice")}
             </p>
             <address className="not-italic font-display text-xl md:text-2xl leading-[1.35] text-[var(--color-bone)]">
               {contact.address.line1}
@@ -112,7 +111,9 @@ const Footer = () => {
 
           {/* Direct */}
           <div className="ft-reveal col-span-6 md:col-span-3">
-            <p className="caption text-[var(--color-bone-50)] mb-5">Direct</p>
+            <p className="caption text-[var(--color-bone-50)] mb-5">
+              {t("footer.direct")}
+            </p>
             <a
               href={`tel:${contact.phoneTel}`}
               className="text-[15px] leading-relaxed text-[var(--color-bone-70)] hover:text-[var(--color-bone)] transition-colors tabular block"
@@ -126,39 +127,41 @@ const Footer = () => {
               {contact.emailGeneral}
             </a>
             <p className="caption text-[var(--color-bone-50)] mt-5 leading-relaxed">
-              {contact.hours}
+              {t("contact.hoursValue")}
             </p>
           </div>
 
           {/* Index */}
           <div className="ft-reveal col-span-6 md:col-span-2">
-            <p className="caption text-[var(--color-bone-50)] mb-5">Index</p>
+            <p className="caption text-[var(--color-bone-50)] mb-5">
+              {t("nav.index")}
+            </p>
             <ul className="flex flex-col gap-2">
               {navIndex.map((item) =>
                 item.external ? (
-                  <li key={item.label}>
+                  <li key={item.key}>
                     <a
                       href={item.href}
                       target="_blank"
                       rel="noopener noreferrer"
                       className="text-[15px] text-[var(--color-bone-70)] hover:text-[var(--color-bone)] transition-colors inline-flex items-baseline gap-1.5"
                     >
-                      {item.label}
+                      {t(`nav.${item.key}`)}
                       <span
                         aria-hidden
                         className="text-[11px] text-[var(--color-bone-50)]"
                       >
-                        ↗
+                        <span className="rtl-flip">↗</span>
                       </span>
                     </a>
                   </li>
                 ) : (
-                  <li key={item.label}>
+                  <li key={item.key}>
                     <Link
                       to={item.to}
                       className="text-[15px] text-[var(--color-bone-70)] hover:text-[var(--color-bone)] transition-colors"
                     >
-                      {item.label}
+                      {t(`nav.${item.key}`)}
                     </Link>
                   </li>
                 )
@@ -169,7 +172,7 @@ const Footer = () => {
           {/* Accreditation + Social */}
           <div className="ft-reveal col-span-12 md:col-span-3">
             <p className="caption text-[var(--color-bone-50)] mb-5">
-              Accreditation
+              {t("footer.accreditation")}
             </p>
             <ul className="flex flex-col gap-1 text-[15px] leading-relaxed text-[var(--color-bone-70)]">
               {certifications.map((c) => (
@@ -182,7 +185,7 @@ const Footer = () => {
               ))}
             </ul>
             <p className="caption text-[var(--color-bone-50)] mt-6 mb-3">
-              Follow
+              {t("footer.follow")}
             </p>
             <div className="flex flex-wrap gap-x-5 gap-y-2">
               {social.map((s) => (
@@ -198,7 +201,7 @@ const Footer = () => {
                     aria-hidden
                     className="text-[10px] text-[var(--color-bone-50)]"
                   >
-                    ↗
+                    <span className="rtl-flip">↗</span>
                   </span>
                 </a>
               ))}
@@ -214,7 +217,7 @@ const Footer = () => {
       >
         <div className="max-w-[1500px] mx-auto flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <h3
-            className="font-display text-[22vw] md:text-[12vw] lg:text-[10vw] leading-[0.92] tracking-[-0.03em] text-[var(--color-bone)] pb-[0.05em]"
+            className="font-display text-[18vw] sm:text-[22vw] md:text-[12vw] lg:text-[10vw] leading-[0.92] tracking-[-0.03em] text-[var(--color-bone)] pb-[0.05em]"
             aria-label={`${company.name} — a ${company.parent} company`}
           >
             Amma<span className="italic text-[var(--color-bone-70)]"> Lines</span>
@@ -231,7 +234,7 @@ const Footer = () => {
               />
             </div>
             <span className="caption text-[var(--color-bone-50)] tabular self-end md:self-auto">
-              Since MCMLXXVIII
+              {t("footer.since")}
             </span>
           </div>
         </div>
@@ -240,20 +243,24 @@ const Footer = () => {
       {/* Colophon */}
       <div className="px-6 md:px-12 lg:px-16 py-6 flex flex-col md:flex-row items-start md:items-center justify-between gap-3">
         <p className="caption text-[var(--color-bone-50)]">
-          © {year} {company.fullName} · A {company.parent} Company
+          {t("footer.copyright", {
+            year,
+            name: company.fullName,
+            parent: company.parent,
+          })}
         </p>
         <div className="flex flex-wrap items-center gap-x-5 gap-y-2">
           <Link
             to="/privacy"
             className="caption text-[var(--color-bone-50)] hover:text-[var(--color-bone)] transition-colors"
           >
-            Privacy
+            {t("footer.privacy")}
           </Link>
           <Link
             to="/terms"
             className="caption text-[var(--color-bone-50)] hover:text-[var(--color-bone)] transition-colors"
           >
-            Terms
+            {t("footer.terms")}
           </Link>
           <span className="caption text-[var(--color-bone-50)] tabular">
             CIN · {company.cin}

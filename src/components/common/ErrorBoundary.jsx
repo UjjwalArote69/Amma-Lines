@@ -99,7 +99,7 @@ class ErrorBoundary extends Component {
                 <button
                   type="button"
                   onClick={this.reload}
-                  className="group relative inline-flex items-center gap-3 pl-5 pr-1.5 py-2 rounded-full transition-all overflow-hidden"
+                  className="group relative inline-flex items-center gap-3 ps-5 pe-1.5 py-2 rounded-full transition-all overflow-hidden"
                   style={{
                     backgroundColor: "var(--color-marine)",
                     color: "#fff",
@@ -110,13 +110,13 @@ class ErrorBoundary extends Component {
                     Return home
                   </span>
                   <span
-                    className="relative h-8 w-8 rounded-full flex items-center justify-center transition-transform duration-500 group-hover:translate-x-0.5"
+                    className="relative h-8 w-8 rounded-full flex items-center justify-center transition-transform duration-500 ltr:group-hover:translate-x-0.5 rtl:group-hover:-translate-x-0.5"
                     style={{
                       backgroundColor: "rgba(255,255,255,0.22)",
                       color: "#fff",
                     }}
                   >
-                    →
+                    <span className="rtl-flip">→</span>
                   </span>
                 </button>
                 <button
@@ -127,7 +127,7 @@ class ErrorBoundary extends Component {
                   <span className="group-hover:text-[var(--color-marine)] transition-colors">
                     Try again
                   </span>
-                  <span className="text-[var(--color-ink-70)] group-hover:text-[var(--color-marine)] group-hover:translate-x-1 transition-all">
+                  <span className="text-[var(--color-ink-70)] group-hover:text-[var(--color-marine)] ltr:group-hover:translate-x-1 rtl:group-hover:-translate-x-1 transition-all">
                     ↻
                   </span>
                 </button>

@@ -2,6 +2,7 @@ import { useRef } from "react";
 import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
+import { useTranslation } from "react-i18next";
 import Button from "../../../components/ui/Button";
 import { services } from "../../../data/services";
 
@@ -9,19 +10,33 @@ gsap.registerPlugin(ScrollTrigger);
 
 /* Six representative disciplines — picked from the full twelve so a
    homepage glance communicates range without duplicating the Services page. */
-const featured = [
+const featuredSlugs = [
   "breakwater-construction",
   "pile-jetties",
   "dredging",
   "caisson-construction",
   "sheet-piling",
   "soil-improvement",
-]
+];
+const featuredSources = featuredSlugs
   .map((slug) => services.find((s) => s.slug === slug))
   .filter(Boolean);
 
 const ExpertiseSection = () => {
   const ref = useRef(null);
+  const { t } = useTranslation();
+
+  const featured = featuredSources.map((s) => {
+    const deliverables =
+      t(`services.catalog.${s.slug}.d`, { returnObjects: true }) || [];
+    return {
+      n: s.n,
+      slug: s.slug,
+      title: t(`services.catalog.${s.slug}.title`),
+      body: t(`services.catalog.${s.slug}.body`),
+      deliverables: Array.isArray(deliverables) ? deliverables : [],
+    };
+  });
 
   useGSAP(() => {
     gsap.fromTo(
@@ -32,11 +47,11 @@ const ExpertiseSection = () => {
         duration: 1,
         stagger: 0.06,
         ease: "power2.out",
-        scrollTrigger: { trigger: ref.current, start: "top 72%" },
+        scrollTrigger: { trigger: ref.current, start: "top 72%", once: true },
       }
     );
     gsap.from(".exp-fade", {
-      scrollTrigger: { trigger: ref.current, start: "top 72%" },
+      scrollTrigger: { trigger: ref.current, start: "top 72%", once: true },
       opacity: 0,
       y: 16,
       duration: 0.8,
@@ -44,7 +59,7 @@ const ExpertiseSection = () => {
       ease: "power3.out",
     });
     gsap.from(".exp-item", {
-      scrollTrigger: { trigger: ".exp-grid", start: "top 80%" },
+      scrollTrigger: { trigger: ".exp-grid", start: "top 80%", once: true },
       y: 30,
       opacity: 0,
       duration: 0.85,
@@ -57,7 +72,7 @@ const ExpertiseSection = () => {
     <section
       ref={ref}
       id="expertise"
-      className="w-full px-6 md:px-12 lg:px-16 py-28 md:py-40 border-t"
+      className="w-full px-6 md:px-12 lg:px-16 py-20 md:py-40 border-t"
       style={{
         backgroundColor: "var(--color-ink)",
         color: "var(--color-bone)",
@@ -68,26 +83,25 @@ const ExpertiseSection = () => {
         <div className="grid grid-cols-12 gap-4 md:gap-6 mb-16 md:mb-24">
           <div className="col-span-12 md:col-span-3">
             <p className="exp-fade caption text-[var(--color-bone-50)]">
-              VI · Capabilities
+              {t("expertise.kicker")}
             </p>
             <p className="exp-fade caption tabular text-[var(--color-bone-50)] mt-3">
-              Six of twelve disciplines
+              {t("expertise.subtitle")}
             </p>
           </div>
           <div className="col-span-12 md:col-span-9">
             <h2 className="font-display text-5xl md:text-7xl lg:text-[6rem] leading-[1.03] max-w-4xl">
               <span className="reveal-line">
-                <span className="exp-line block">Delivered by</span>
+                <span className="exp-line block">{t("expertise.headlineA")}</span>
               </span>
               <span className="reveal-line">
                 <span className="exp-line block italic text-[var(--color-bone-70)]">
-                  our own crews.
+                  {t("expertise.headlineAItalic")}
                 </span>
               </span>
             </h2>
             <p className="exp-fade mt-10 max-w-xl text-lg text-[var(--color-bone-70)] leading-relaxed">
-              Every discipline below is executed by our own engineers, crews
-              and fleet — under an ISO-certified QHSE system.
+              {t("expertise.body")}
             </p>
           </div>
         </div>
@@ -104,7 +118,7 @@ const ExpertiseSection = () => {
                   / {it.n}
                 </span>
                 <span
-                  className="h-[1px] flex-1 ml-4 transition-colors duration-500 group-hover:bg-[var(--color-marine-soft)]"
+                  className="h-[1px] flex-1 ms-4 transition-colors duration-500 group-hover:bg-[var(--color-marine-soft)]"
                   style={{ backgroundColor: "var(--color-bone-15)" }}
                 />
               </div>
@@ -131,13 +145,11 @@ const ExpertiseSection = () => {
 
         <div className="mt-16 flex flex-col md:flex-row md:items-end md:justify-between gap-6">
           <p className="max-w-xl text-[var(--color-bone-70)] leading-relaxed">
-            Six more — RO-RO jetties, block jetties, caissons, cofferdams,
-            well sinking and technical-advisory services — are detailed on
-            the full Services page.
+            {t("expertise.more")}
           </p>
           <div className="self-start">
             <Button to="/services" variant="primary-light">
-              All twelve services
+              {t("buttons.allServices")}
             </Button>
           </div>
         </div>

@@ -1,14 +1,22 @@
 /**
- * Lightweight Suspense fallback shown while a code-split route chunk loads.
- * Matches the site palette; no layout shift, no spinner jank.
+ * Suspense fallback shown while a code-split route chunk loads.
+ *
+ * Renders a full-viewport bone-colored panel — not just a small bar — so
+ * that the dark-navy <Footer/>, which sits outside the Suspense boundary
+ * in <App/>, doesn't slide up under the navbar and flash a "blue screen"
+ * at the user while the chunk downloads.
  */
 const RouteLoader = () => (
   <div
-    className="fixed inset-0 z-[1] flex items-end justify-center pointer-events-none"
+    className="w-full flex items-end justify-center"
+    style={{
+      minHeight: "100dvh",
+      backgroundColor: "var(--color-bone)",
+    }}
     aria-hidden
   >
     <div
-      className="h-[2px] w-24 mb-8 overflow-hidden rounded-full"
+      className="h-[2px] w-24 mb-16 overflow-hidden rounded-full"
       style={{ backgroundColor: "var(--color-ink-12)" }}
     >
       <span

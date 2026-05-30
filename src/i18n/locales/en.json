@@ -35,6 +35,7 @@
     "beginProject": "Begin a project",
     "viewProjects": "View our projects",
     "browseProjects": "Browse projects",
+    "browseWorks": "Browse our works",
     "startProject": "Start a project",
     "sendEnquiry": "Send enquiry",
     "fullArchive": "Full archive",
@@ -45,7 +46,8 @@
     "readServices": "Read the full services",
     "returnHome": "Return home",
     "tryAgain": "Try again",
-    "getInTouch": "Get in touch"
+    "getInTouch": "Get in touch",
+    "readStory": "Read the practice story"
   },
   "hero": {
     "kicker": "Marine Infrastructure · Since 1978",
@@ -56,7 +58,13 @@
     "headlineAItalic": "land",
     "headlineB": "meets the",
     "headlineBItalic": "sea.",
-    "summary": "The flagship marine-construction firm of the Meka Group — delivering breakwaters, jetties and deepwater works across India and international waters since 1978."
+    "summary": "The flagship marine-construction firm of the Meka Group — delivering breakwaters, jetties and deepwater works across India and international waters since 1978.",
+    "trustStats": {
+      "foundedLabel": "Founded in Mumbai",
+      "dredgedLabel": "Dredged in the last decade",
+      "countriesLabel": "Countries served — India & Qatar",
+      "isoLabel": "9001 · 14001 · 45001"
+    }
   },
   "locale": {
     "switcher": "Language",
@@ -71,5 +79,473 @@
     "continue": ". By continuing you consent in line with India's Digital Personal Data Protection Act, 2023. You can decline non-essential use.",
     "decline": "Decline non-essential",
     "accept": "Accept all"
+  },
+  "marquee": {
+    "kicker": "Delivered & ongoing works",
+    "region": "India & Qatar"
+  },
+  "vision": {
+    "kicker": "III · Practice",
+    "section": "Section 01 / 05",
+    "headlineA": "Redefining marine and port",
+    "headlineAItalic": "infrastructure",
+    "headlineB": "with innovation,",
+    "headlineC": "reliability & sustainability.",
+    "body1": "Incorporated in Mumbai on 13 December 1978 by {{founder}}, Amma Lines grew from a pioneering marine construction company into the flagship of the Meka Group. Over four decades, we have delivered most of India's major breakwaters — including the longest, at Tuticorin Port — along with landmark jetties, deepwater dredging and reclamation works.",
+    "body2": "Our works are delivered by our own engineers, crews and fleet under an ISO-certified QHSE management system. Dredging is now executed primarily through our sister company, Meka Dredging.",
+    "founded": "Founded",
+    "registered": "Registered",
+    "registeredValue": "Mumbai",
+    "group": "Group",
+    "groupValue": "Meka",
+    "figCaption": "Fig. IV · Coastal works",
+    "figCaptionSince": "Since 1978"
+  },
+  "feature": {
+    "kicker": "II · A closer look",
+    "study": "Feature Study · Karaikal Port",
+    "headlineA": "1,300 metres of",
+    "headlineAItalic": "armoured coastline",
+    "headlineB": "on the Bay of Bengal.",
+    "fig1": "Fig. I · North & South breakwaters, Karaikal Port",
+    "fig1Metric": "1,300 m",
+    "fig2": "Fig. II · Dredged approach channel & basin",
+    "fig3": "Fig. III · Armour placement, construction phase",
+    "narrative1": "Amma Lines delivered the north and south breakwaters at Karaikal Port — 1,300 metres of armoured coastline — together with 666,500 m³ of capital dredging. The works were executed as an integrated marine scope for Karaikal Port.",
+    "narrative2": "It remains one of several landmark port developments the firm has delivered since the late 1980s, alongside the floating breakwater at JNPT (1988), the Ennore Port breakwaters (1999) and the passenger jetty at Elephanta Island.",
+    "specification": "Specification",
+    "spec": {
+      "project": "Project",
+      "projectValue": "North & South Breakwaters",
+      "location": "Location",
+      "locationValue": "Karaikal Port, Puducherry",
+      "commissioned": "Commissioned",
+      "commissionedValue": "2009",
+      "discipline": "Discipline",
+      "disciplineValue": "Breakwater · Dredging",
+      "breakwaterLength": "Breakwater length",
+      "breakwaterLengthValue": "1,300 m",
+      "dredgedVolume": "Dredged volume",
+      "dredgedVolumeValue": "666,500 m³",
+      "client": "Client",
+      "clientValue": "Karaikal Port Pvt. Ltd.",
+      "scope": "Scope",
+      "scopeValue": "Integrated marine works"
+    }
+  },
+  "stats": {
+    "kicker": "IV · The Ledger",
+    "subtitle": "Verifiable works, not vanity metrics",
+    "card1Number": "1978",
+    "card1Label": "Incorporated in Mumbai",
+    "card1Method": "CIN · U74999TN1978PTC007674 · Founded by Dr. Meka Papa Rao",
+    "card2Unit": "M m³",
+    "card2Label": "Dredged & reclaimed",
+    "card2Method": "Across Karaikal, Hazira, Kochi and Kakinada projects",
+    "card3Unit": "km",
+    "card3Label": "Breakwater delivered",
+    "card3Method": "JNPT (650 m) · Ennore (4 km) · Karaikal (1,300 m)",
+    "card4Number": "ISO",
+    "card4Unit": "3",
+    "card4Label": "Certified operations",
+    "card4Method": "9001 · 14001 · 45001 — QHSE-audited across all works",
+    "accredited": "Accredited operations"
+  },
+  "portfolio": {
+    "kicker": "V · Selected works",
+    "yearRange": "1988 — 2024",
+    "headlineA": "A chronology",
+    "headlineAItalic": "of tide and stone."
+  },
+  "expertise": {
+    "kicker": "VI · Capabilities",
+    "subtitle": "Six of twelve disciplines",
+    "headlineA": "Delivered by",
+    "headlineAItalic": "our own crews.",
+    "body": "Every discipline below is executed by our own engineers, crews and fleet — under an ISO-certified QHSE system.",
+    "more": "Six more — RO-RO jetties, block jetties, caissons, cofferdams, well sinking and technical-advisory services — are detailed on the full Services page."
+  },
+  "dispatches": {
+    "kicker": "VII · Recognition",
+    "subtitle": "Selected awards & milestones",
+    "headlineA": "The work we do,",
+    "headlineAItalic": "and what it earns.",
+    "award": "Award"
+  },
+  "about": {
+    "chapter": "II · Practice",
+    "title": "Flagship of the Meka Group",
+    "pagePrefix": "CIN",
+    "ledeKicker": "On the firm",
+    "ledeHeadlineA": "A marine practice",
+    "ledeHeadlineAItalic": "incorporated in 1978.",
+    "ledeBody": "Amma Lines Pvt. Ltd. was incorporated on 13 December 1978 by {{founder}} in Mumbai. From a pioneering marine construction firm, it has grown into the flagship of the Meka Group — delivering world-class marine infrastructure, coastal protection and port development across India and international waters.",
+    "founded": "Founded",
+    "foundedValue": "1978",
+    "legacy": "Legacy",
+    "legacyValue": "40+ yrs",
+    "valuesKicker": "III · Values",
+    "valuesHeadline": "Four principles",
+    "valuesHeadlineItalic": "we return to.",
+    "valuesBody": "Not values on a wall — these are decisions we make every day, at the site and in the office.",
+    "timelineKicker": "IV · Chronology",
+    "timelineHeadline": "From 1978 to",
+    "timelineHeadlineItalic": "today.",
+    "recognitionKicker": "V · Recognition",
+    "recognitionHeadline": "Selected awards &",
+    "recognitionHeadlineItalic": "milestones.",
+    "leadershipKicker": "VI · Leadership",
+    "leadershipHeadline": "The people",
+    "leadershipHeadlineItalic": "who stand site.",
+    "ctaKicker": "Work with us",
+    "ctaHeadline": "Write to the practice.",
+    "ctaHeadlineItalic": "We read every letter."
+  },
+  "services": {
+    "chapter": "III · Services",
+    "title": "Twelve Disciplines, In-House",
+    "range": "01 — 12",
+    "ledeKicker": "What we practice",
+    "ledeHeadlineA": "Twelve disciplines",
+    "ledeHeadlineAItalic": "one practice",
+    "ledeHeadlineB": "under one roof.",
+    "ledeBody": "Every discipline below is delivered by our own engineers, crews and fleet. We do not mediate marine works.",
+    "figPrefix": "Fig.",
+    "inHouse": "In-house",
+    "ctaKicker": "Technical enquiry",
+    "ctaHeadline": "Considering a marine work?",
+    "ctaHeadlineItalic": "Let us walk the site with you.",
+    "catalog": {
+      "breakwater-construction": {
+        "title": "Breakwater Construction",
+        "short": "Protection",
+        "body": "A forty-year legacy in breakwater construction — including the longest breakwaters in India, at Tuticorin Port. Rubble-mound, armoured and guide-bund structures engineered to dissipate tidal surge and protect working harbours.",
+        "d": ["Wave-climate modelling", "Armour design & placement", "Guide-bund & rubble-mound", "Lifecycle monitoring"]
+      },
+      "piling": {
+        "title": "Piling",
+        "short": "Foundations",
+        "body": "Piling solutions that form the backbone of strong, sustainable marine and civil structures — driven and bored, engineered for challenging soils and coastal conditions.",
+        "d": ["Driven tubular & H-piles", "Bored cast-in-situ", "Pile-load testing", "Corrosion protection"]
+      },
+      "sheet-piling": {
+        "title": "Sheet Piling",
+        "short": "Retaining",
+        "body": "Sheet piling for marine and coastal infrastructure — engineered for earth retention and water control in challenging environments: cofferdams, bund walls, quays.",
+        "d": ["Hot-rolled sheet piles", "Combi-wall systems", "Interlock grouting", "Anchor & tie-rod works"]
+      },
+      "pile-jetties": {
+        "title": "Pile Jetties",
+        "short": "Berthing",
+        "body": "Pile jetties serve several marine needs — from LNG jetties to container berths. The multi-use advantages make it the go-to technology for most modern marine construction.",
+        "d": ["Trestle & deck works", "LNG & container berths", "Fendering & mooring", "Cathodic protection"]
+      },
+      "block-jetties": {
+        "title": "Block Jetties",
+        "short": "Berthing",
+        "body": "Robust block jetties designed for long-lasting stability and support in coastal environments — constructed with durable pre-cast concrete blocks, placed underwater to the millimetre.",
+        "d": ["Pre-cast block design", "Sub-sea placement", "Back-fill & reclamation", "Capping beams"]
+      },
+      "ro-ro-jetties": {
+        "title": "RO-RO Jetties",
+        "short": "Transfer",
+        "body": "With cargo becoming more versatile, Roll-on / Roll-off jetties are used for everything from cars and buses to ODC (Over-Dimensional Cargo) packages. Ramps engineered for tidal range and vessel draft.",
+        "d": ["Linkspan design", "Tidal ramp systems", "Heavy-traffic decks", "ODC-ready access"]
+      },
+      "cofferdam-construction": {
+        "title": "Cofferdam Construction",
+        "short": "Dry-works",
+        "body": "Cofferdams are vital temporary works — watertight enclosures that protect construction equipment and crews, giving a dry, stable working environment below sea level.",
+        "d": ["Sheet-pile cofferdams", "Double-wall cellular", "Dewatering systems", "Seal-slab design"]
+      },
+      "caisson-construction": {
+        "title": "Caisson Construction",
+        "short": "Foundations",
+        "body": "A caisson is a large watertight retaining structure used in marine works — from bridge-pier foundations to port construction and concrete-dam works. Floated, sunk and sealed to grade.",
+        "d": ["Open caissons", "Pneumatic caissons", "Sinking & grouting", "Underwater concrete"]
+      },
+      "well-sinking": {
+        "title": "Well Sinking",
+        "short": "Foundations",
+        "body": "Similar to caissons, well sinking differs by being open at the bottom — used primarily in bridges and pier construction where foundation soils are deep.",
+        "d": ["Circular wells", "Rectangular wells", "Grabbing & dredging", "Plug & capping"]
+      },
+      "dredging": {
+        "title": "Dredging",
+        "short": "Navigation",
+        "body": "One of our original strengths. Deepwater works are now executed primarily through our sister company, Meka Dredging — but we continue to deliver dredging as part of our integrated marine scope.",
+        "d": ["Capital dredging", "Maintenance dredging", "Rock trenching", "Reclamation"]
+      },
+      "soil-improvement": {
+        "title": "Soil Improvement",
+        "short": "Ground",
+        "body": "Soil improvement covers many disciplines — on land and underwater. We deploy vibro-compaction, stone columns, preloading and other techniques to prepare seabeds for decades of service.",
+        "d": ["Vibro-compaction", "Stone columns", "Preloading & PVDs", "Settlement monitoring"]
+      },
+      "technical-services": {
+        "title": "Technical Services & Solutions",
+        "short": "Advisory",
+        "body": "Decades of engineering and innovation in marine and hydraulic environments. Bathymetric surveys, geotechnical investigation, condition assessments, feasibility studies and construction management for owners, authorities and EPC contractors.",
+        "d": ["Bathymetric survey", "Geotechnical SI", "Condition assessment", "Feasibility & PMC"]
+      }
+    }
+  },
+  "projects": {
+    "chapter": "IV · Projects",
+    "title": "Selected works · 1988 — 2024",
+    "documentedSuffix": "documented works",
+    "ledeKicker": "The register",
+    "ledeHeadlineA": "Breakwaters, jetties",
+    "ledeHeadlineAItalic": "and deepwater works",
+    "ledeHeadlineB": "since 1988.",
+    "ledeBody": "A selection of documented works — from the 650-metre floating breakwater at JNPT to the ongoing North Field Expansion trenching in Qatar. This register shows {{count}} cited projects; our full delivered-works list is larger.",
+    "filters": {
+      "allWorks": "All works",
+      "breakwaters": "Breakwaters",
+      "jetties": "Jetties",
+      "dredging": "Dredging"
+    },
+    "view": "View",
+    "viewGrid": "Grid",
+    "viewIndex": "Index",
+    "clientLabel": "Client",
+    "empty": "No works indexed in this category.",
+    "columns": {
+      "num": "№",
+      "project": "Project",
+      "location": "Location",
+      "scale": "Scale",
+      "year": "Year",
+      "status": "Status"
+    },
+    "status": {
+      "Delivered": "Delivered",
+      "Ongoing": "Ongoing"
+    },
+    "categories": {
+      "Breakwaters": "Breakwaters",
+      "Jetties": "Jetties",
+      "Dredging": "Dredging"
+    },
+    "metricLabels": {
+      "breakwater length": "breakwater length",
+      "jetty length": "jetty length",
+      "total breakwater length": "total breakwater length",
+      "pile jetty": "pile jetty",
+      "dredged volume": "dredged volume",
+      "trenched & back-filled": "trenched & back-filled",
+      "pre-lay trenching & backfilling": "pre-lay trenching & backfilling"
+    },
+    "catalog": {
+      "jnpt-floating-breakwater": {
+        "title": "Floating Breakwater (Guide-bund)",
+        "location": "JNPT, Navi Mumbai",
+        "state": "Maharashtra"
+      },
+      "elephanta-jetty": {
+        "title": "Elephanta Island Jetty",
+        "location": "Mumbai Harbour",
+        "state": "Maharashtra"
+      },
+      "ennore-breakwaters": {
+        "title": "Ennore Port Breakwaters",
+        "location": "Ennore Port, Chennai",
+        "state": "Tamil Nadu"
+      },
+      "seabird-amadalli": {
+        "title": "Project Seabird — Amadalli",
+        "location": "Karwar",
+        "state": "Karnataka",
+        "note": "Breakwater, pile jetty, dredging and building works combined."
+      },
+      "karaikal-breakwaters": {
+        "title": "North & South Breakwaters",
+        "location": "Karaikal Port",
+        "state": "Puducherry"
+      },
+      "karaikal-dredging": {
+        "title": "Dredging & Reclamation",
+        "location": "Karaikal Port",
+        "state": "Puducherry"
+      },
+      "hazira-outfitting-jetty": {
+        "title": "Outfitting Jetty",
+        "location": "Hazira",
+        "state": "Gujarat"
+      },
+      "hazira-dredging-lt": {
+        "title": "Dredging & Reclamation",
+        "location": "Hazira",
+        "state": "Gujarat"
+      },
+      "kochi-naval": {
+        "title": "Naval Base Dredging",
+        "location": "Kochi",
+        "state": "Kerala"
+      },
+      "hazira-dredging-ril": {
+        "title": "Dredging & Reclamation",
+        "location": "Hazira",
+        "state": "Gujarat"
+      },
+      "ongc-trenching": {
+        "title": "ONGC 98/2 — Pre-lay Trenching",
+        "location": "Kakinada",
+        "state": "Andhra Pradesh"
+      },
+      "nfxp": {
+        "title": "North Field Expansion (NFXP)",
+        "location": "Ras Laffan Industrial City",
+        "state": "Qatar"
+      }
+    }
+  },
+  "contact": {
+    "chapter": "V · Correspondence",
+    "title": "Write to the Practice",
+    "region": "Mumbai · India",
+    "ledeKicker": "The letter desk",
+    "ledeHeadlineA": "Write to us.",
+    "ledeHeadlineAItalic": "We answer every letter.",
+    "ledeBody": "For project enquiries, technical collaboration or press — our engineering team reads incoming mail within a working day.",
+    "headOffice": "Head office",
+    "telephone": "Telephone",
+    "email": "Email",
+    "hours": "Hours",
+    "accreditation": "Accreditation",
+    "careers": "Careers",
+    "hoursValue": "Monday — Friday · 09:30 — 18:30 IST",
+    "replyBadge": "Replies within one working day",
+    "sectionYou": "About you",
+    "sectionProject": "About the project",
+    "required": "required",
+    "optional": "optional",
+    "openNow": "Open now",
+    "closed": "Closed",
+    "opensAt": "Opens 09:30 IST",
+    "coordinates": "18.99° N · 72.82° E",
+    "bearingLabel": "Bearing · Mumbai · 19° N",
+    "directLine": "Direct line",
+    "directMail": "Direct mail",
+    "callTooltip": "Tap to call",
+    "mailTooltip": "Tap to send",
+    "briefCount": "{{count}} / {{max}}",
+    "successTitle": "Message received.",
+    "successBody": "Your enquiry is in the engineering team's queue. A reply will reach your inbox within one working day — typically from Mumbai, sometimes from a site office on the coast.",
+    "successAgain": "Send another",
+    "formKicker": "Project enquiry",
+    "formHeadline": "Tell us about the work.",
+    "formDisciplinesSuffix": "disciplines",
+    "firstName": "First name",
+    "firstNamePlaceholder": "Aditi",
+    "lastName": "Last name",
+    "lastNamePlaceholder": "Rao",
+    "organisation": "Organisation",
+    "organisationPlaceholder": "Port authority, EPC contractor, owner",
+    "emailLabel": "Email",
+    "emailPlaceholder": "a.rao@example.com",
+    "phone": "Phone",
+    "phonePlaceholder": "+91 …",
+    "discipline": "Discipline",
+    "brief": "Brief",
+    "briefPlaceholder": "Site, scope, approximate programme.",
+    "reply": "We reply within one working day.",
+    "topics": {
+      "breakwater": "Breakwater",
+      "jetty": "Jetty",
+      "dredging": "Dredging",
+      "piling": "Piling",
+      "caisson": "Caisson / Cofferdam",
+      "technical": "Technical services",
+      "general": "General enquiry"
+    }
+  },
+  "notFound": {
+    "title": "Page not found",
+    "subtitle": "The address is not on the chart",
+    "code": "Err. 404",
+    "kicker": "A chart error",
+    "bearing": "Bearing · unknown",
+    "headlineA": "This page was",
+    "headlineAItalic": "never charted.",
+    "body": "The address you followed does not exist on the Amma Lines site. It may have been moved, renamed, or the link may be mistyped. Every documented work and page sits on the paths below.",
+    "indexLabel": "Index"
+  },
+  "values": {
+    "01": {
+      "title": "Quality Construction",
+      "body": "Every project is delivered to global engineering standards — durable, safe, inspected, and built to last in the harshest marine environments."
+    },
+    "02": {
+      "title": "Mutual Partnership",
+      "body": "Long-term collaborations with owners, EPC contractors and authorities — built on absolute trust, transparent reporting, and shared accountability."
+    },
+    "03": {
+      "title": "Proactive Safety",
+      "body": "An ISO-certified QHSE management system. Safety is the measure of engineering, not a box to be ticked at hand-over."
+    },
+    "04": {
+      "title": "Teamwork",
+      "body": "Collaboration, innovation and excellence through skilled crews, modern equipment and hands-on leadership — the same teams, year after year."
+    }
+  },
+  "timeline": {
+    "1978": {
+      "title": "Foundation",
+      "body": "Incorporated on 13 December 1978 by Dr. Meka Papa Rao, as the pioneering marine construction company that would become the flagship of the Meka Group."
+    },
+    "1988": {
+      "title": "Floating Breakwater, JNPT",
+      "body": "The 650-metre floating breakwater (guide-bund) at Jawaharlal Nehru Port, Navi Mumbai — the firm's first landmark marine work."
+    },
+    "1990": {
+      "title": "Elephanta Island Jetty",
+      "body": "The 560-metre passenger jetty at Elephanta Island, Mumbai Harbour."
+    },
+    "1999": {
+      "title": "Ennore Port",
+      "body": "Four kilometres of breakwaters at Ennore Port, Tamil Nadu."
+    },
+    "2009": {
+      "title": "Karaikal Port",
+      "body": "1,300 metres of north & south breakwaters and 666,500 m³ of dredging at Karaikal Port, Puducherry."
+    },
+    "2024": {
+      "title": "ETInfra Awards",
+      "body": "Recognised by The Economic Times ETInfra Awards for Best Infrastructure Company — Marine Industry (Small Cap) and Excellence in Transportation Infrastructure — Marine."
+    }
+  },
+  "leadership": {
+    "hmr": {
+      "role": "Director",
+      "bio": "Mechanical Engineer, Georgia Institute of Technology, USA. Leads the practice with a focus on innovative, cost-effective marine solutions — elevating a family legacy that began in 1978."
+    },
+    "basu": {
+      "role": "Vice President",
+      "bio": "Thirty-five-plus years of expertise in HDPE pipeline installation, heavy marine infrastructure and EPC-project delivery. Oversees technical execution across all active sites."
+    },
+    "rayudu": {
+      "role": "Head of Dredging",
+      "bio": "Forty-plus years of specialised experience in large-scale dredging operations and marine infrastructure. Directs the fleet and the firm's approach to weather-window planning."
+    }
+  },
+  "awards": {
+    "2024a": {
+      "title": "Best Infrastructure Company — Marine (Small Cap)",
+      "body": "The Economic Times ETInfra Awards."
+    },
+    "2024b": {
+      "title": "Excellence in Transportation Infrastructure — Marine",
+      "body": "The Economic Times ETInfra Awards."
+    },
+    "2023": {
+      "title": "10 Million Work Hours LTI-Free",
+      "body": "Felicitated by McDermott for contribution to a 10 million work-hours Lost-Time-Injury-free milestone."
+    }
+  },
+  "certifications": {
+    "Quality": "Quality",
+    "Environment": "Environment",
+    "OHS": "OHS"
   }
 }

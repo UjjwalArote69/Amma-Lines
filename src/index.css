@@ -63,6 +63,17 @@
   --tracking-editorial: -0.02em;
   --tracking-caption: 0.22em;
   --tracking-tight: -0.01em;
+
+  /* Marquee — registered so `animate-marquee` is a Tailwind utility.
+     Duplicate the track content in JSX and animate by -50% for a
+     seamless loop. */
+  --animate-marquee: marquee-scroll 80s linear infinite;
+  --animate-marquee-fast: marquee-scroll 60s linear infinite;
+
+  @keyframes marquee-scroll {
+    0%   { transform: translate3d(0, 0, 0); }
+    100% { transform: translate3d(-50%, 0, 0); }
+  }
 }
 
 /* ============================================================
@@ -218,29 +229,6 @@ html.lenis body { height: auto; }
 ::-webkit-scrollbar-thumb:hover { background-color: var(--color-marine); }
 
 /* ============================================================
-   MARQUEE
-   ============================================================ */
-@keyframes marquee-scroll {
-  from { transform: translate3d(0, 0, 0); }
-  to { transform: translate3d(-50%, 0, 0); }
-}
-.marquee-track {
-  animation: marquee-scroll 80s linear infinite;
-  will-change: transform;
-}
-@media (min-width: 768px) {
-  .marquee-track {
-    animation-duration: 60s;
-  }
-}
-/* Respect users who prefer reduced motion */
-@media (prefers-reduced-motion: reduce) {
-  .marquee-track {
-    animation: none;
-  }
-}
-
-/* ============================================================
    IMAGE TREATMENT
    ============================================================ */
 .duotone {
@@ -254,6 +242,87 @@ html.lenis body { height: auto; }
 .hover-colorize:hover,
 .group:hover .hover-colorize {
   filter: grayscale(0) contrast(1);
+}
+
+/* ============================================================
+   RTL SUPPORT
+   Arrow glyphs (→, ↗) are visual directional cues, not text, so
+   they must be mirrored in right-to-left layouts. Apply .rtl-flip
+   to any inline span holding an arrow. Additionally, any element
+   whose transform origin is fixed to the left edge (progress
+   bars, marquee tracks) must switch to the right edge under RTL.
+   ============================================================ */
+[dir="rtl"] .rtl-flip {
+  display: inline-block;
+  transform: scaleX(-1);
+}
+
+[dir="rtl"] .pl-bar {
+  transform-origin: right center !important;
+}
+
+/* The marquee translates the duplicated track by -50% for a
+   seamless loop. In RTL we reverse the direction so the scroll
+   reads naturally for Arabic readers. */
+[dir="rtl"] .animate-marquee,
+[dir="rtl"] .animate-marquee-fast {
+  animation-direction: reverse;
+}
+
+/* Drop cap — in LTR it floats left; in RTL it must float right and
+   the horizontal margins must mirror. */
+[dir="rtl"] .dropcap::first-letter {
+  float: right;
+  margin: 0.08em -0.04em 0 0.12em;
+}
+
+/* Legal prose list bullets — padding flips from left to right. */
+[dir="rtl"] .legal-prose ul,
+[dir="rtl"] .legal-prose ol {
+  padding-right: 0;
+}
+[dir="rtl"] .legal-prose li {
+  padding-left: 0;
+  padding-right: 1.5rem;
+}
+
+/* ============================================================
+   HINDI (DEVANAGARI) TYPOGRAPHY
+   Devanagari glyphs sit with a top bar (शिरोरेखा) and carry
+   vowel signs above (ी ै ो) and conjuncts below (ृ ू ्र). The
+   Latin-first metrics baked into the reveal-line mask and the
+   tight display line-heights (0.9–1.05) clip these marks.
+   Scope the relaxation to html[lang="hi"] so English and Arabic
+   rendering is untouched.
+   ============================================================ */
+html[lang="hi"] .reveal-line {
+  padding-top: 0.22em !important;
+  padding-bottom: 0.34em !important;
+}
+
+/* Display headlines use tight Tailwind leading (0.9–1.05) which
+   clips Devanagari matras. Relax to 1.22 in Hindi only. */
+html[lang="hi"] .font-display {
+  line-height: 1.22 !important;
+}
+
+/* Body prose and captions can also bump slightly so conjuncts
+   aren't crushed between lines. */
+html[lang="hi"] p,
+html[lang="hi"] li,
+html[lang="hi"] dd,
+html[lang="hi"] dt,
+html[lang="hi"] span.caption,
+html[lang="hi"] .caption,
+html[lang="hi"] .caption-lg {
+  line-height: 1.55;
+}
+
+/* Drop caps in Hindi: the giant first-letter needs extra top
+   clearance so the शिरोरेखा doesn't touch the paragraph above. */
+html[lang="hi"] .dropcap::first-letter {
+  line-height: 1 !important;
+  margin-top: 0.12em;
 }
 
 /* ============================================================

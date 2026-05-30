@@ -3,31 +3,24 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import Button from "../../../components/ui/Button";
 import { introDelay } from "../../../utils/preloader";
 import { projects } from "../../../data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
-/* Featured triptych — three real, representative works. */
-const triptych = [
-  projects.find((p) => p.title === "North & South Breakwaters"),
-  projects.find((p) => p.title === "Ennore Port Breakwaters"),
-  projects.find((p) => p.title === "Elephanta Island Jetty"),
-].map((p, i) => ({
-  n: String(i + 1).padStart(2, "0"),
-  title: p.location.replace(/,.*$/, ""), // headline location
-  meta: `${p.state} · ${p.year}`,
-  type: `${p.category} · ${p.metric}`,
-  img: p.img,
-}));
-
-const trustStats = [
-  { n: "1978", l: "Founded in Mumbai" },
-  { n: "13 M m³", l: "Dredged in the last decade" },
-  { n: "2", l: "Countries served — India & Qatar" },
-  { n: "ISO", l: "9001 · 14001 · 45001" },
+/* Featured triptych — three real, representative works, looked up by slug
+   so the structural fields (image, year, metric) stay language-agnostic
+   while title/location are resolved at render time via i18n. */
+const triptychSlugs = [
+  "karaikal-breakwaters",
+  "ennore-breakwaters",
+  "elephanta-jetty",
 ];
+const triptychSources = triptychSlugs
+  .map((slug) => projects.find((p) => p.slug === slug))
+  .filter(Boolean);
 
 gsap.registerPlugin(ScrollTrigger);
 
@@ -36,13 +29,13 @@ const HeroTile = ({ work, index, active, setActive, className = "", heightClass 
     to="/projects"
     onMouseEnter={() => setActive(index)}
     onMouseLeave={() => setActive(null)}
-    className={`h-tile group relative block ${className}`}
+    className={`h-tile group relative block opacity-0 ${className}`}
   >
     <div
       className={`relative overflow-hidden ${heightClass}`}
       style={{ backgroundColor: "var(--color-paper)" }}
     >
-      <div className="h-mask absolute inset-0">
+      <div className="h-mask absolute inset-0 [clip-path:inset(100%_0%_0%_0%)]">
         <img loading="lazy" decoding="async"
           src={work.img}
           alt={work.title}
@@ -57,7 +50,7 @@ const HeroTile = ({ work, index, active, setActive, className = "", heightClass 
       </div>
 
       {/* Index chip */}
-      <div className="absolute top-3 left-3 md:top-4 md:left-4">
+      <div className="absolute top-3 start-3 md:top-4 md:start-4">
         <span
           className="h-6 px-2 flex items-center caption tabular"
           style={{
@@ -71,16 +64,16 @@ const HeroTile = ({ work, index, active, setActive, className = "", heightClass 
 
       {/* Hover arrow */}
       <div
-        className={`absolute top-3 right-3 md:top-4 md:right-4 h-8 w-8 rounded-full flex items-center justify-center transition-all duration-500 ${
+        className={`absolute top-3 end-3 md:top-4 md:end-4 h-8 w-8 rounded-full flex items-center justify-center transition-all duration-500 ${
           active === index ? "opacity-100 scale-100" : "opacity-0 scale-75"
         }`}
         style={{ backgroundColor: "var(--color-marine)", color: "#fff" }}
       >
-        ↗
+        <span className="rtl-flip">↗</span>
       </div>
 
       {/* Caption pill */}
-      <div className="absolute left-3 right-3 bottom-3 md:left-4 md:right-4 md:bottom-4">
+      <div className="absolute start-3 end-3 bottom-3 md:start-4 md:end-4 md:bottom-4">
         <div
           className="inline-flex flex-col px-3 py-2 backdrop-blur-md"
           style={{
@@ -110,11 +103,44 @@ const HeroTile = ({ work, index, active, setActive, className = "", heightClass 
 const HeroSection = () => {
   const ref = useRef(null);
   const [activeTile, setActiveTile] = useState(null);
+  const { t } = useTranslation();
+
+  /* Resolve the triptych's translated title/location/category at render
+     time. Keep the structural fields (img, year, metric) from the data. */
+  const triptych = triptychSources.map((p, i) => {
+    const location = t(`projects.catalog.${p.slug}.location`);
+    return {
+      n: String(i + 1).padStart(2, "0"),
+      title: location.replace(/,.*$/, ""),
+      meta: `${t(`projects.catalog.${p.slug}.state`)} · ${p.year}`,
+      type: `${t(`projects.categories.${p.categoryKey}`)} · ${p.metric}`,
+      img: p.img,
+    };
+  });
+
+  const trustStats = [
+    { n: "1978", l: t("hero.trustStats.foundedLabel") },
+    { n: "13 M m³", l: t("hero.trustStats.dredgedLabel") },
+    { n: "2", l: t("hero.trustStats.countriesLabel") },
+    { n: "ISO", l: t("hero.trustStats.isoLabel") },
+  ];
 
   useGSAP(() => {
+    /* Preloader runs ~2.6s total. Start the hero while it's still
+       fading so the handover feels continuous.
+
+       Pre-paint hidden state: the JSX paints opacity-0 / clip-path on
+       its own, but the headline's y-offset must be enforced through
+       the `transform` property (GSAP's channel) — Tailwind v4's
+       `translate-y-*` writes the modern `translate` property, which
+       GSAP doesn't manage, so it can leak through during the
+       introDelay window. Setting `yPercent` here pins the line
+       hidden via `transform` before the first paint. */
+    gsap.set(".h-line", { yPercent: 120 });
+
     const tl = gsap.timeline({
       defaults: { ease: "power2.out" },
-      delay: introDelay(0.2, 3.3),
+      delay: introDelay(0.2, 2.3),
     });
 
     tl.fromTo(
@@ -124,8 +150,8 @@ const HeroSection = () => {
     )
       .fromTo(
         ".h-line",
-        { y: "108%" },
-        { y: "0%", duration: 1.1, stagger: 0.08 },
+        { yPercent: 120 },
+        { yPercent: 0, duration: 1.1, stagger: 0.08 },
         "-=0.4"
       )
       .fromTo(
@@ -173,25 +199,25 @@ const HeroSection = () => {
             style={{ backgroundColor: "var(--color-ink-30)" }}
           />
           <div className="flex items-center justify-between gap-4 py-3">
-            <div className="h-kicker flex items-center gap-3 md:gap-6 min-w-0">
+            <div className="h-kicker flex items-center gap-3 md:gap-6 min-w-0 [&>*]:opacity-0">
               <div className="flex items-center gap-3 min-w-0">
                 <span
                   className="h-[6px] w-[6px] rounded-full shrink-0"
                   style={{ backgroundColor: "var(--color-marine)" }}
                 />
                 <span className="caption text-[var(--color-ink-70)] truncate">
-                  <span className="sm:hidden">Since 1978</span>
+                  <span className="sm:hidden">{t("hero.kickerShort")}</span>
                   <span className="hidden sm:inline">
-                    Marine Infrastructure · Since 1978
+                    {t("hero.kicker")}
                   </span>
                 </span>
               </div>
               <span className="caption text-[var(--color-ink-40)] hidden lg:inline shrink-0">
-                Flagship of the Meka Group
+                {t("hero.flagship")}
               </span>
             </div>
             <span className="h-kicker caption text-[var(--color-ink-40)] tabular hidden md:block shrink-0">
-              Selected works / 03 of 12
+              {t("hero.selected")}
             </span>
           </div>
           <div
@@ -204,26 +230,26 @@ const HeroSection = () => {
       {/* Headline */}
       <div className="px-6 md:px-12 lg:px-16 pt-10 md:pt-14">
         <div className="max-w-[1500px] mx-auto">
-          <h1 className="font-display leading-[0.94] tracking-[-0.02em] text-[12vw] md:text-[7.8vw] lg:text-[6vw]">
+          <h1 className="font-display leading-[0.94] tracking-[-0.02em] text-[10vw] sm:text-[12vw] md:text-[7.8vw] lg:text-[6vw]">
             <span className="reveal-line">
               <span className="h-line block">
-                We build where the{" "}
+                {t("hero.headlineA")}{" "}
                 <em
                   className="italic"
                   style={{ color: "var(--color-marine)" }}
                 >
-                  land
+                  {t("hero.headlineAItalic")}
                 </em>
               </span>
             </span>
             <span className="reveal-line">
               <span className="h-line block">
-                meets the{" "}
+                {t("hero.headlineB")}{" "}
                 <em
                   className="italic"
                   style={{ color: "var(--color-marine)" }}
                 >
-                  sea.
+                  {t("hero.headlineBItalic")}
                 </em>
               </span>
             </span>
@@ -265,19 +291,17 @@ const HeroSection = () => {
 
       {/* Lower: description + CTAs */}
       <div className="px-6 md:px-12 lg:px-16 pt-14 md:pt-20 pb-16 md:pb-20">
-        <div className="max-w-[1500px] mx-auto h-lower grid grid-cols-12 gap-6 md:gap-10">
+        <div className="max-w-[1500px] mx-auto h-lower grid grid-cols-12 gap-6 md:gap-10 [&>*]:opacity-0">
           <p className="col-span-12 md:col-span-6 text-[17px] md:text-[20px] leading-[1.55] text-[var(--color-ink-70)] max-w-xl">
-            The flagship marine-construction firm of the Meka Group — delivering
-            breakwaters, jetties and deepwater works across India and
-            international waters since 1978.
+            {t("hero.summary")}
           </p>
 
           <div className="col-span-12 md:col-span-6 flex flex-col sm:flex-row items-start sm:items-center gap-4 sm:gap-6 md:justify-end">
             <Button to="/projects" variant="primary">
-              Browse our works
+              {t("buttons.browseProjects")}
             </Button>
             <Button to="/contact" variant="ghost">
-              Start a project
+              {t("buttons.startProject")}
             </Button>
           </div>
         </div>
@@ -294,7 +318,7 @@ const HeroSection = () => {
               <div
                 key={s.l}
                 className={`flex items-baseline gap-3 md:gap-4 ${
-                  i !== 0 ? "md:pl-10 md:border-l" : ""
+                  i !== 0 ? "md:ps-10 md:border-s" : ""
                 }`}
                 style={i !== 0 ? { borderColor: "var(--color-ink-12)" } : {}}
               >

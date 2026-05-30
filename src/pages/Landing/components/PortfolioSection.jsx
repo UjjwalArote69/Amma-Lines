@@ -3,35 +3,43 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { useGSAP } from "@gsap/react";
 import { Link } from "react-router";
+import { useTranslation } from "react-i18next";
 import Button from "../../../components/ui/Button";
 import { projects } from "../../../data/projects";
 
 gsap.registerPlugin(ScrollTrigger);
 
 /* Curated selection — chronological spread across breakwaters, jetties and dredging. */
-const selection = [
-  "Floating Breakwater (Guide-bund)",
-  "Elephanta Island Jetty",
-  "Ennore Port Breakwaters",
-  "North & South Breakwaters",
-  "Dredging & Reclamation", // Reliance Industries Hazira 2016
-  "North Field Expansion (NFXP)",
-]
-  .map((t) => projects.find((p) => p.title === t))
-  .filter(Boolean)
-  .map((p, i) => ({
-    n: String(i + 1).padStart(2, "0"),
-    title: p.title,
-    location: p.location,
-    type: p.category + (p.metric ? ` · ${p.metric}` : ""),
-    year: p.year,
-    img: p.img,
-  }));
+const selectionSlugs = [
+  "jnpt-floating-breakwater",
+  "elephanta-jetty",
+  "ennore-breakwaters",
+  "karaikal-breakwaters",
+  "hazira-dredging-ril",
+  "nfxp",
+];
+
+const selectionSources = selectionSlugs
+  .map((slug) => projects.find((p) => p.slug === slug))
+  .filter(Boolean);
 
 const PortfolioSection = () => {
   const ref = useRef(null);
   const previewRef = useRef(null);
   const [hover, setHover] = useState(null);
+  const { t } = useTranslation();
+
+  const selection = selectionSources.map((p, i) => ({
+    n: String(i + 1).padStart(2, "0"),
+    slug: p.slug,
+    title: t(`projects.catalog.${p.slug}.title`),
+    location: t(`projects.catalog.${p.slug}.location`),
+    type:
+      t(`projects.categories.${p.categoryKey}`) +
+      (p.metric ? ` · ${p.metric}` : ""),
+    year: p.year,
+    img: p.img,
+  }));
 
   useGSAP(() => {
     gsap.fromTo(
@@ -42,11 +50,11 @@ const PortfolioSection = () => {
         duration: 1,
         stagger: 0.06,
         ease: "power2.out",
-        scrollTrigger: { trigger: ".pf-header", start: "top 80%" },
+        scrollTrigger: { trigger: ".pf-header", start: "top 80%", once: true },
       }
     );
     gsap.from(".pf-fade", {
-      scrollTrigger: { trigger: ".pf-header", start: "top 80%" },
+      scrollTrigger: { trigger: ".pf-header", start: "top 80%", once: true },
       opacity: 0,
       y: 14,
       duration: 0.8,
@@ -54,7 +62,7 @@ const PortfolioSection = () => {
       ease: "power3.out",
     });
     gsap.from(".pf-row", {
-      scrollTrigger: { trigger: ".pf-list", start: "top 75%" },
+      scrollTrigger: { trigger: ".pf-list", start: "top 75%", once: true },
       opacity: 0,
       y: 20,
       duration: 0.8,
@@ -85,33 +93,33 @@ const PortfolioSection = () => {
     <section
       ref={ref}
       id="portfolio"
-      className="relative w-full px-6 md:px-12 lg:px-16 py-28 md:py-40 overflow-hidden"
+      className="relative w-full px-6 md:px-12 lg:px-16 py-20 md:py-40 overflow-hidden"
       style={{ backgroundColor: "var(--color-bone)" }}
     >
       <div className="max-w-[1500px] mx-auto">
         <div className="pf-header grid grid-cols-12 gap-4 md:gap-6 mb-16 md:mb-20">
           <div className="col-span-12 md:col-span-3">
             <p className="pf-fade caption text-[var(--color-ink-50)]">
-              V · Selected works
+              {t("portfolio.kicker")}
             </p>
             <p className="pf-fade caption tabular text-[var(--color-ink-40)] mt-3">
-              1988 — 2024
+              {t("portfolio.yearRange")}
             </p>
           </div>
           <div className="col-span-12 md:col-span-9 flex flex-col md:flex-row md:items-end justify-between gap-6">
             <h2 className="font-display text-5xl md:text-7xl lg:text-[6rem] leading-[1] max-w-3xl">
               <span className="reveal-line">
-                <span className="pf-line block">A chronology</span>
+                <span className="pf-line block">{t("portfolio.headlineA")}</span>
               </span>
               <span className="reveal-line">
                 <span className="pf-line block italic text-[var(--color-ink-70)]">
-                  of tide and stone.
+                  {t("portfolio.headlineAItalic")}
                 </span>
               </span>
             </h2>
             <div className="pf-fade self-start md:self-auto">
               <Button to="/projects" variant="primary">
-                Full archive
+                {t("buttons.fullArchive")}
               </Button>
             </div>
           </div>
@@ -120,7 +128,7 @@ const PortfolioSection = () => {
         <ul className="pf-list flex flex-col border-t border-[var(--color-ink-20)]">
           {selection.map((p, i) => (
             <li
-              key={`${p.title}-${p.year}`}
+              key={p.slug}
               onMouseEnter={() => setHover(i)}
               onMouseLeave={() => setHover(null)}
               className="pf-row"
@@ -134,13 +142,13 @@ const PortfolioSection = () => {
                 </span>
 
                 <div className="col-span-10 md:col-span-6">
-                  <h3 className="font-display text-3xl md:text-5xl lg:text-[3.6rem] leading-[1.02] text-[var(--color-ink)] transition-all duration-500 group-hover:translate-x-4">
+                  <h3 className="font-display text-3xl md:text-5xl lg:text-[3.6rem] leading-[1.02] text-[var(--color-ink)] transition-all duration-500 ltr:group-hover:translate-x-4 rtl:group-hover:-translate-x-4">
                     {p.title}
                     <span
-                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 italic text-[var(--color-ink-50)] ml-3"
+                      className="opacity-0 group-hover:opacity-100 transition-opacity duration-500 italic text-[var(--color-ink-50)] ms-3"
                       aria-hidden
                     >
-                      ↗
+                      <span className="rtl-flip">↗</span>
                     </span>
                   </h3>
                 </div>
@@ -173,7 +181,7 @@ const PortfolioSection = () => {
       {/* Cursor-follow preview */}
       <div
         ref={previewRef}
-        className="pointer-events-none absolute top-0 left-0 hidden md:block"
+        className="pointer-events-none absolute top-0 start-0 hidden md:block"
         style={{ zIndex: 5, transform: "translate3d(0,0,0)" }}
       >
         <div
